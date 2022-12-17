@@ -16,14 +16,22 @@ public class MeshGenerator : MonoBehaviour
 
     public int index = 0;
 
+    //[HideInInspector]
+    public int xIndex;
+    //[HideInInspector]
+    public int zIndex;
+
     [HideInInspector]
     public int octaves;
     [HideInInspector]
     public Vector2 origin;
 
+    MapGenerator generator;
+
     // Start is called before the first frame update
     void Start()
     {
+        generator = FindObjectOfType<MapGenerator>();
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         CreateShape();
@@ -41,14 +49,18 @@ public class MeshGenerator : MonoBehaviour
                 float y = 0;
                 float opacity = 1;
                 float nosieScale = .006f;
+                int xInd = x + xIndex;
+                int zInd = z + zIndex;
                 for (int o = 0; o < octaves; o++)
                 {
                     float currentY = Mathf.PerlinNoise((x + transform.position.x + origin.x) * nosieScale, (z + transform.position.z + origin.y) * nosieScale) * 20;
+                    currentY *= generator.FallOffMap(xInd, zInd);
                     //currentY /= opacity;
                     y += currentY;
                     opacity *= 2;
                     nosieScale *= 2;
                 }
+
                 vertices[i] = new Vector3(x, y, z);
                 i++;
             }

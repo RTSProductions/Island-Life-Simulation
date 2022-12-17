@@ -57,6 +57,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSize: 20
   zSize: 20
+  index: 0
+  xIndex: 0
+  zIndex: 0
+  octaves: 0
+  origin: {x: 0, y: 0}
 --- !u!64 &1632830460048223903
 MeshCollider:
   m_ObjectHideFlags: 0

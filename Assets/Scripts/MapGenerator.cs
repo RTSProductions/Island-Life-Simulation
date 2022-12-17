@@ -16,7 +16,17 @@ public class MapGenerator : MonoBehaviour
     [Range(0, 999999)]
     public int seed = 0000000;
 
-    public float[,] falloffMap;
+    public float seaLevel = 5;
+
+    //public float[,] falloffMap;
+
+    [HideInInspector]
+    public Transform midPoint;
+
+    [HideInInspector]
+    public float maxDist;
+
+    public GameObject ocean;
 
     Vector2 origin;
 
@@ -27,18 +37,23 @@ public class MapGenerator : MonoBehaviour
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
         int zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
 
-        falloffMap = new float[xIslandSize, zIslandSize];
-        for (int i = 0; i < xIslandSize; i++)
-        {
-            for (int j = 0; j < zIslandSize; j++)
-            {
-                float x = i / (float)xIslandSize * 2 - 1;
-                float z = j / (float)zIslandSize * 2 - 1;
+        //falloffMap = new float[xIslandSize, zIslandSize];
+        //for (int i = 0; i < xIslandSize; i++)
+        //{
+        //    for (int j = 0; j < zIslandSize; j++)
+        //    {
+        //        float x = i / (float)xIslandSize * 2 - 1;
+        //        float z = j / (float)zIslandSize * 2 - 1;
 
-                float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
-                falloffMap[i, j] = Evaluate(value);
-            }
-        }
+        //        float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
+        //        falloffMap[i, j] = Evaluate(value);
+        //    }
+        //}
+        float midX = xIslandSize / 2;
+        float midZ = zIslandSize / 2;
+        midPoint = new GameObject("Mid Point").transform;
+        midPoint.position = new Vector3(midX, 0, midZ);
+        maxDist = Vector3.Distance(transform.position, midPoint.position);
         GenerateMap();
     }
 
@@ -69,12 +84,12 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
-    public float FallOffMap(int x, int y)
-    {
-        float falloff = falloffMap[x, y];
+    //public float FallOffMap(int x, int y)
+    //{
+    //    float falloff = falloffMap[x, y];
 
-        return falloff;
-    }
+    //    return falloff;
+    //}
 
     public static float Evaluate(float value)
     {

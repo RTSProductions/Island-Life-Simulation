@@ -365,7 +365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1077838988
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -479,6 +479,8 @@ MonoBehaviour:
   zSize: 50
   octaves: 2
   seed: 256097
+  midPoint: {fileID: 0}
+  maxDist: 0
 --- !u!4 &1195480450
 Transform:
   m_ObjectHideFlags: 0

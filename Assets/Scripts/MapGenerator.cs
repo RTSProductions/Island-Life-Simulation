@@ -141,6 +141,11 @@ public class MapGenerator : MonoBehaviour
                 house.transform.parent = village.transform;
 
             }
+            for (int j = 0; j < villages.population; j++)
+            {
+                var villager = Instantiate(villages.villager, villagePoint.point, Quaternion.identity);
+                villager.transform.parent = village.transform;
+            }
         }
     }
 
@@ -228,9 +233,13 @@ public class FoliageSpawner
 [System.Serializable]
 public class VillageSpawner
 {
+    public GameObject villager;
+
     public GameObject house;
 
     public int count;
+
+    public int population = 7;
 
     public float maxDist = 10;
 

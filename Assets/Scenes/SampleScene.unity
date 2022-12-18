@@ -233,7 +233,7 @@ MonoBehaviour:
   DirectinalLight: {fileID: 705507994}
   Preset: {fileID: 11400000, guid: 8613a84aa2737491681548fbc65d4d8e, type: 2}
   TimeOfDay: 8.8
-  speed: 0.2
+  speed: 0.05
 --- !u!1 &727949670
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,16 +592,18 @@ MonoBehaviour:
   Foliage:
   - name: Tree
     prefab: {fileID: 497721982288463426, guid: 46d44576462f1439398203d7de03004f, type: 3}
-    count: 200
+    count: 900
   - name: Rock
     prefab: {fileID: 3934876279841137907, guid: b589243873ec443fcab70d22f3ec1d7a, type: 3}
-    count: 40
+    count: 100
   - name: Fern
     prefab: {fileID: 1076873970968766207, guid: 254cc8c9fbf0a4d48bcf1f2dd0bab932, type: 3}
-    count: 60
+    count: 140
   villages:
+    villager: {fileID: 5689835426879535664, guid: 72128ea493afa4cafb209a0a7e0a347e, type: 3}
     house: {fileID: 5703046057555214956, guid: e11cedd40069048a584627fe2937f95f, type: 3}
     count: 10
+    population: 7
     maxDist: 30
     minDist: 7
 --- !u!4 &1195480450

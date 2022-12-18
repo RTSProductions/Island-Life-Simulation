@@ -18,6 +18,8 @@ public class MapGenerator : MonoBehaviour
 
     public bool randomizeSeed;
 
+    public bool randomizeSeaLevel;
+
     public float seaLevel = 5;
     [HideInInspector]
     public float maxDist;
@@ -33,6 +35,8 @@ public class MapGenerator : MonoBehaviour
 
     public FoliageSpawner[] Foliage;
 
+    public VillageSpawner villages;
+
     Vector2 origin;
 
     // Start is called before the first frame update
@@ -41,6 +45,10 @@ public class MapGenerator : MonoBehaviour
         if (randomizeSeed == true)
         {
             seed = Random.Range(0, 999999);
+        }
+        if (randomizeSeaLevel == true)
+        {
+            seaLevel = Random.Range(5, 23);
         }
         origin = new Vector2(Mathf.Sqrt(seed), Mathf.Sqrt(seed));
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
@@ -99,6 +107,7 @@ public class MapGenerator : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         PlaceFoliage();
+        SpawnVillages();
     }
 
 
@@ -113,6 +122,23 @@ public class MapGenerator : MonoBehaviour
                 var obj = Instantiate(foliage.prefab, spawnPoint.point, Quaternion.Euler(spawnPoint.hitNormal));
                 float randomScale = Random.Range(0.9f, 2);
                 obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
+            }
+        }
+    }
+
+    void SpawnVillages()
+    {
+        for (int i = 0; i < villages.count; i++)
+        {
+            ObjectSpawnData villagePoint = GetSpawnPoint();
+            var village = new GameObject("Village " + i);
+            village.transform.position = villagePoint.point;
+            for (int j = 0; j < Random.Range(3, 10); j++)
+            {
+                ObjectSpawnData housePoint = GetVillagePoint(village.transform.position);
+                var house = Instantiate(villages.house, housePoint.point, Quaternion.LookRotation(housePoint.hitNormal));
+                house.transform.parent = village.transform;
 
             }
         }
@@ -151,11 +177,40 @@ public class MapGenerator : MonoBehaviour
         if (Physics.Raycast(data.point, Vector3.down, out hit, 200, terrain) && hit.point.y > seaLevel)
         {
             data.point = new Vector3(randX, hit.point.y, randZ);
-            data.hitNormal = new Vector3(-hit.normal.z, hit.normal.x, -hit.normal.y);
+            data.hitNormal = new Vector3(hit.normal.z, hit.normal.x, hit.normal.y);
         }
         else
         {
             data = GetSpawnPoint();
+        }
+
+        return data;
+    }
+
+    ObjectSpawnData GetVillagePoint(Vector3 village)
+    {
+        ObjectSpawnData data = new ObjectSpawnData();
+
+        float xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
+        float zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
+
+        float range = ((xIslandSize + zIslandSize) / 2);
+        float randX = Random.Range(0, range);
+        float randZ = Random.Range(0, range);
+
+        data.point = new Vector3(randX, 70, randZ);
+
+        RaycastHit hit;
+        float distToVillage = Vector3.Distance(new Vector3(village.x, 0, village.z), new Vector3(randX, 0, randZ));
+
+        if (Physics.Raycast(data.point, Vector3.down, out hit, 200, terrain) && hit.point.y > seaLevel && distToVillage <= villages.maxDist && distToVillage >= villages.minDist)
+        {
+            data.point = new Vector3(randX, hit.point.y, randZ);
+            data.hitNormal = hit.normal;//new Vector3(hit.normal.z, hit.normal.x, hit.normal.y);
+        }
+        else
+        {
+            data = GetVillagePoint(village);
         }
 
         return data;
@@ -169,6 +224,17 @@ public class FoliageSpawner
     public GameObject prefab;
 
     public int count;
+}
+[System.Serializable]
+public class VillageSpawner
+{
+    public GameObject house;
+
+    public int count;
+
+    public float maxDist = 10;
+
+    public float minDist = 3;
 }
 public class ObjectSpawnData
 {

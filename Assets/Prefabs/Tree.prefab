@@ -150,7 +150,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2494185979427425891, guid: b12a4eb22b8344484a062501e21910ef, type: 3}
 --- !u!4 &7560576310105382266 stripped

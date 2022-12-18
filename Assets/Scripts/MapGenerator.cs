@@ -16,23 +16,32 @@ public class MapGenerator : MonoBehaviour
     [Range(0, 999999)]
     public int seed = 0000000;
 
+    public bool randomizeSeed;
+
     public float seaLevel = 5;
+    [HideInInspector]
+    public float maxDist;
+
+    public LayerMask terrain;
 
     //public float[,] falloffMap;
 
     [HideInInspector]
     public Transform midPoint;
 
-    [HideInInspector]
-    public float maxDist;
-
     public GameObject ocean;
+
+    public FoliageSpawner[] Foliage;
 
     Vector2 origin;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (randomizeSeed == true)
+        {
+            seed = Random.Range(0, 999999);
+        }
         origin = new Vector2(Mathf.Sqrt(seed), Mathf.Sqrt(seed));
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
         int zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
@@ -53,8 +62,10 @@ public class MapGenerator : MonoBehaviour
         float midZ = zIslandSize / 2;
         midPoint = new GameObject("Mid Point").transform;
         midPoint.position = new Vector3(midX, 0, midZ);
+        ocean.transform.position = new Vector3(midX, seaLevel, midZ);
         maxDist = Vector3.Distance(transform.position, midPoint.position);
         GenerateMap();
+        StartCoroutine(waitPlaceObjs());
     }
 
     // Update is called once per frame
@@ -84,6 +95,29 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+    IEnumerator waitPlaceObjs()
+    {
+        yield return new WaitForSeconds(1f);
+        PlaceFoliage();
+    }
+
+
+    void PlaceFoliage()
+    {
+        foreach(FoliageSpawner foliage in Foliage)
+        {
+            for (int i = 0; i < foliage.count; i++)
+            {
+                ObjectSpawnData spawnPoint = GetSpawnPoint();
+
+                var obj = Instantiate(foliage.prefab, spawnPoint.point, Quaternion.Euler(spawnPoint.hitNormal));
+                float randomScale = Random.Range(0.9f, 2);
+                obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
+            }
+        }
+    }
+
     //public float FallOffMap(int x, int y)
     //{
     //    float falloff = falloffMap[x, y];
@@ -98,4 +132,47 @@ public class MapGenerator : MonoBehaviour
 
         return Mathf.Pow(value, a) / (Mathf.Pow(value, a) + Mathf.Pow(b - b * value, a));
     }
+
+    ObjectSpawnData GetSpawnPoint()
+    {
+        ObjectSpawnData data = new ObjectSpawnData();
+
+        float xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
+        float zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
+
+        float range = ((xIslandSize + zIslandSize) / 2);
+        float randX = Random.Range(0, range);
+        float randZ = Random.Range(0, range);
+
+        data.point = new Vector3(randX, 70, randZ);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(data.point, Vector3.down, out hit, 200, terrain) && hit.point.y > seaLevel)
+        {
+            data.point = new Vector3(randX, hit.point.y, randZ);
+            data.hitNormal = new Vector3(-hit.normal.z, hit.normal.x, -hit.normal.y);
+        }
+        else
+        {
+            data = GetSpawnPoint();
+        }
+
+        return data;
+    }
+}
+[System.Serializable]
+public class FoliageSpawner
+{
+    public string name;
+
+    public GameObject prefab;
+
+    public int count;
+}
+public class ObjectSpawnData
+{
+    public Vector3 point;
+
+    public Vector3 hitNormal;
 }

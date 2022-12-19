@@ -48,7 +48,7 @@ public class MapGenerator : MonoBehaviour
         }
         if (randomizeSeaLevel == true)
         {
-            seaLevel = Random.Range(5, 23);
+            seaLevel = Random.Range(5, 27);
         }
         origin = new Vector2(Mathf.Sqrt(seed), Mathf.Sqrt(seed));
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
@@ -134,6 +134,10 @@ public class MapGenerator : MonoBehaviour
             ObjectSpawnData villagePoint = GetSpawnPoint();
             var village = new GameObject("Village " + i);
             village.transform.position = villagePoint.point;
+            Village vil = village.AddComponent<Village>();
+            vil.generator = this;
+            int index = Random.Range(0, villages.skinColors.Length - 1);
+            vil.SkinColor = villages.skinColors[index];
             for (int j = 0; j < Random.Range(3, 10); j++)
             {
                 ObjectSpawnData housePoint = GetVillagePoint(village.transform.position);
@@ -145,6 +149,14 @@ public class MapGenerator : MonoBehaviour
             {
                 var villager = Instantiate(villages.villager, villagePoint.point, Quaternion.identity);
                 villager.transform.parent = village.transform;
+                villager.GetComponent<Villager>().village = vil;
+                villager.GetComponent<Villager>().mesh.sharedMaterial = vil.SkinColor;
+            }
+            for (int j = 0; j < villages.requiredStructures.Length; j++)
+            {
+                ObjectSpawnData structurePoint = GetVillagePoint(village.transform.position);
+                var structure = Instantiate(villages.requiredStructures[j], structurePoint.point, Quaternion.LookRotation(structurePoint.hitNormal));
+                structure.transform.parent = village.transform;
             }
         }
     }
@@ -237,6 +249,8 @@ public class VillageSpawner
 
     public GameObject house;
 
+    public GameObject[] requiredStructures;
+
     public int count;
 
     public int population = 7;
@@ -244,6 +258,10 @@ public class VillageSpawner
     public float maxDist = 10;
 
     public float minDist = 3;
+
+    public float waypointRange = 10;
+
+    public Material[] skinColors;
 }
 public class ObjectSpawnData
 {

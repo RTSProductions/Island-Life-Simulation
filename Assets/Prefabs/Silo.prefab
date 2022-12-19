@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3072479968773067344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6033181816373559980}
+  - component: {fileID: 2449102235425970620}
+  - component: {fileID: -4051996945762537875}
+  m_Layer: 0
+  m_Name: Silo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6033181816373559980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3072479968773067344}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 382.11, y: 346.8212, z: 411.7743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3054189932973651970}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2449102235425970620
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3072479968773067344}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.75
+  m_Height: 10.950836
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 5.429337}
+--- !u!114 &-4051996945762537875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3072479968773067344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5aa0a2a8fc63480e8243a986ed013d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storage:
+  - name: Fern
+    foodType: 0
+    amountSotred: 0
+  - name: Apple
+    foodType: 1
+    amountSotred: 0
+--- !u!1001 &3307912560317734889
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6033181816373559980}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.9140002
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9140002
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.9140002
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_Name
+      value: Silo
+      objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3dbd9a0db6e6c44d68d13c8aa56ec795, type: 2}
+    - target: {fileID: 7202271454713460447, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dbb73f06a951649ea9c344de2e42af6c, type: 2}
+    - target: {fileID: 7202271454713460447, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: a7e387a3473344beabf32369b1942e3c, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+--- !u!4 &3054189932973651970 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1250045cae3f47e68bd7d7637be6d12, type: 3}
+  m_PrefabInstance: {fileID: 3307912560317734889}
+  m_PrefabAsset: {fileID: 0}

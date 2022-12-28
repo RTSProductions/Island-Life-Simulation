@@ -20,5 +20,5 @@ public class Food : MonoBehaviour
 }
 public enum FoodType
 {
-    Fern, Apple
+    Fern, Apple, Bunny, Fox
 }

@@ -10,6 +10,10 @@ public class Villager : MonoBehaviour
 
     public float visionRadius = 30;
 
+    public float attackRate = 0.5f;
+
+    public float damage = 10;
+
     public LayerMask obstacleAvoidance;
 
     public Village village;
@@ -22,6 +26,8 @@ public class Villager : MonoBehaviour
 
     Transform player;
 
+    float attackDelay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +38,14 @@ public class Villager : MonoBehaviour
     void Update()
     {
         See();
+        if (transform.position.y <= -20)
+        {
+            transform.position = new Vector3(transform.position.x, 70, transform.position.z);
+            rb.velocity = Vector3.zero;
+            target = village.GetVillagePoint();
+        }
         float distToTarget = Vector3.Distance(transform.position, target);
-        if (distToTarget <= 5)
+        if (distToTarget <= 2)
         {
             if (LightingManager.night == true)
             {
@@ -41,7 +53,7 @@ public class Villager : MonoBehaviour
             }
             else
             {
-                target = GetMovePoint();
+                target = GetMovePoint(0);
             }
         }
 
@@ -85,7 +97,7 @@ public class Villager : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 
-    Vector3 GetMovePoint()
+    Vector3 GetMovePoint(int tries)
     {
         Vector3 point;
 
@@ -96,13 +108,19 @@ public class Villager : MonoBehaviour
 
         RaycastHit hit;
 
+        if (tries >= 10)
+        {
+            return point;
+        }
+
         if (Physics.Raycast(point, Vector3.down, out hit, 200))
         {
             point = new Vector3(randX + transform.position.x, hit.point.y, randZ + transform.position.z);
         }
         else
         {
-            point = GetMovePoint();
+            tries++;
+            point = GetMovePoint(tries);
         }
 
         return point;
@@ -117,42 +135,83 @@ public class Villager : MonoBehaviour
 
         foreach (var other in others)
         {
-            float dist = Vector3.Distance(transform.position, other.transform.position);
-            if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "House(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != this.transform.parent)
+            if (other.gameObject != gameObject)
             {
-                target = other.transform.position;
-                if (dist <= 5)
+                float dist = Vector3.Distance(transform.position, other.transform.position);
+                if (other.TryGetComponent<Giant>(out Giant giant))
                 {
-                    if (other.gameObject.name == "Silo(Clone)" || other.gameObject.name == "Smiths Hut(Clone)")
+                    target = giant.transform.position;
+                    if (dist <= 12)
                     {
-                        TakeOver(other.transform.parent.GetComponent<Village>());
-                        Destroy(other.transform.parent.gameObject);
+                        Attack(giant.GetComponent<Target>());
                     }
-                    Destroy(other.gameObject);
                 }
-            }
-            else if (other.TryGetComponent<Food>(out Food food))
-            {
-                target = food.transform.position;
-                if (dist <= 5)
+                else if (other.TryGetComponent<Villager>(out Villager villager) && villager.village != village)
                 {
-                    Silo silo = village.GetComponentInChildren<Silo>();
-                    silo.Add(food.foodType, 1);
-                    target = silo.transform.position;
-                    Destroy(food.gameObject);
+                    target = villager.transform.position;
+                    if (dist <= 3)
+                    {
+                        Attack(villager.GetComponent<Target>());
+                    }
                 }
+                else if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "House(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != this.transform.parent)
+                {
+                    Target structure = other.GetComponent<Target>();
+                    target = other.transform.position;
+                    if (dist <= 5)
+                    {
+                        if (structure.health <= damage)
+                        {
+                            if (other.gameObject.name == "Silo(Clone)" || other.gameObject.name == "Smiths Hut(Clone)")
+                            {
+                                Destroy(other.transform.parent.gameObject, 1);
+                                TakeOver(other.transform.parent.GetComponent<Village>());
+                            }
+                        }
+                        Attack(structure);
+                    }
+                }
+                else if (other.TryGetComponent<Bunny>(out Bunny bunny))
+                {
+                    target = bunny.transform.position;
+                    if (dist <= 3)
+                    {
+                        Attack(bunny.GetComponent<Target>());
+                    }
 
-            }
-            else if (other.TryGetComponent<Resource>(out Resource resource))
-            {
-                target = resource.transform.position;
-                if (dist <= 5)
-                {
-                    SmithsHut smithsHut = village.GetComponentInChildren<SmithsHut>();
-                    smithsHut.Add(resource.resourceType, 1);
-                    target = smithsHut.transform.position;
-                    Destroy(resource.gameObject, 3);
                 }
+                else if (other.TryGetComponent<Fox>(out Fox fox))
+                {
+                    target = fox.transform.position;
+                    if (dist <= 3)
+                    {
+                        Attack(fox.GetComponent<Target>());
+                    }
+
+                }
+                else if (other.TryGetComponent<Food>(out Food food))
+                {
+                    target = food.transform.position;
+                    if (dist <= 5)
+                    {
+                        Silo silo = village.GetComponentInChildren<Silo>();
+                        silo.Add(food.foodType, 1);
+                        target = silo.transform.position;
+                        Destroy(food.gameObject);
+                    }
+
+                }
+                //else if (other.TryGetComponent<Resource>(out Resource resource))
+                //{
+                //    target = resource.transform.position;
+                //    if (dist <= 5)
+                //    {
+                //        SmithsHut smithsHut = village.GetComponentInChildren<SmithsHut>();
+                //        smithsHut.Add(resource.resourceType, 1);
+                //        target = smithsHut.transform.position;
+                //        Destroy(resource.gameObject, 3);
+                //    }
+                //}
             }
         }
     }
@@ -167,7 +226,16 @@ public class Villager : MonoBehaviour
         }
         for (int i = 0; i < newTeritory.transform.childCount; i++)
         {
-            newTeritory.transform.GetChild(i).parent = transform.parent;
+            newTeritory.transform.GetChild(i).SetParent(village.transform);
+        }
+    }
+
+    void Attack(Target attacked)
+    {
+        if (Time.time >= attackDelay)
+        {
+            attacked.TakeDamage(damage);
+            attackDelay = Time.time + attackRate;
         }
     }
 

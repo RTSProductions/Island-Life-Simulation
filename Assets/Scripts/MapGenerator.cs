@@ -35,6 +35,8 @@ public class MapGenerator : MonoBehaviour
 
     public FoliageSpawner[] Foliage;
 
+    public FoliageSpawner[] Animals;
+
     public VillageSpawner villages;
 
     Vector2 origin;
@@ -107,6 +109,7 @@ public class MapGenerator : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         PlaceFoliage();
+        PlaceAnimals();
         SpawnVillages();
     }
 
@@ -123,6 +126,19 @@ public class MapGenerator : MonoBehaviour
                 float randomScale = Random.Range(0.9f, 2);
                 obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
 
+            }
+        }
+    }
+
+    void PlaceAnimals()
+    {
+        foreach (FoliageSpawner animal in Animals)
+        {
+            for (int i = 0; i < animal.count; i++)
+            {
+                ObjectSpawnData spawnPoint = GetSpawnPoint();
+
+                var obj = Instantiate(animal.prefab, spawnPoint.point, Quaternion.identity);
             }
         }
     }

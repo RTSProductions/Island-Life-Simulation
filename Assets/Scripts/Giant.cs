@@ -30,6 +30,7 @@ public class Giant : MonoBehaviour
     void Start()
     {
         //target = GetMovePoint();
+        target = new Vector3(300, 40, 400);
     }
 
     // Update is called once per frame
@@ -43,7 +44,7 @@ public class Giant : MonoBehaviour
             target = GetMovePoint();
         }
         float distToTarget = Vector3.Distance(transform.position, target);
-        if (distToTarget <= 12)
+        if (distToTarget <= 15)
         {
             target = GetMovePoint();
         }
@@ -117,7 +118,7 @@ public class Giant : MonoBehaviour
                 {
                     Target structure = other.GetComponent<Target>();
                     target = other.transform.position;
-                    if (dist <= 15)
+                    if (dist <= 20)
                     {
                         Attack(structure);
                     }
@@ -171,11 +172,30 @@ public class Giant : MonoBehaviour
     {
         if (Time.time >= attackDelay)
         {
-            Collider[] destructables = Physics.OverlapSphere(transform.position, visionRadius);
+            StartCoroutine(WaitAttackAnimation(attacked));
+        }
+    }
 
-            foreach (Collider obj in destructables)
+    IEnumerator StablizeRBs(Rigidbody rb)
+    {
+        yield return new WaitForSeconds(30);
+
+        if (rb != null)
+            rb.isKinematic = true;
+    }
+
+    IEnumerator WaitAttackAnimation(Target attacked)
+    {
+        GetComponentInChildren<Animator>().Play("Giant Stomp");
+
+        yield return new WaitForSeconds(1);
+
+        Collider[] destructables = Physics.OverlapSphere(transform.position, visionRadius / 2);
+
+        foreach (Collider obj in destructables)
+        {
+            if (obj.gameObject != gameObject)
             {
-
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
 
                 if (rb != null)
@@ -185,24 +205,32 @@ public class Giant : MonoBehaviour
                         rb.isKinematic = false;
                         StartCoroutine(StablizeRBs(rb));
                     }
-                    rb.AddExplosionForce(attackForce, transform.position, visionRadius, 10);
+                    rb.AddExplosionForce(attackForce, transform.position, visionRadius / 2, 20);
                 }
                 if (obj.TryGetComponent<Target>(out Target target))
                 {
-                    target.TakeDamage(30);
+                    target.TakeDamage(20);
                 }
             }
-            attacked.TakeDamage(damage);
-            attackDelay = Time.time + attackRate;
         }
+        if (attacked != null)
+            attacked.TakeDamage(damage);
+        attackDelay = Time.time + attackRate;
     }
 
-    IEnumerator StablizeRBs(Rigidbody rb)
+    private void OnTriggerEnter(Collider other)
     {
-        yield return new WaitForSeconds(10);
+
+        Rigidbody rb = other.GetComponent<Rigidbody>();
 
         if (rb != null)
-            rb.isKinematic = true;
+        {
+            if (rb.isKinematic == true)
+            {
+                rb.isKinematic = false;
+                StartCoroutine(StablizeRBs(rb));
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

@@ -38,7 +38,7 @@ public class Villager : MonoBehaviour
     void Update()
     {
         See();
-        if (transform.position.y <= -20)
+        if (transform.position.y <= -80)
         {
             transform.position = new Vector3(transform.position.x, 70, transform.position.z);
             rb.velocity = Vector3.zero;
@@ -236,6 +236,7 @@ public class Villager : MonoBehaviour
         {
             attacked.TakeDamage(damage);
             attackDelay = Time.time + attackRate;
+            GetComponentInChildren<Animator>().Play("Guy Attacking");
         }
     }
 

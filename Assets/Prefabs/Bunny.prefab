@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4838013160052970222}
   food: {fileID: 3444365056706504912, guid: a9736107be3f94c41be502c2a0e5e80a, type: 3}
-  speed: 12
+  speed: 11
   visionRadius: 15
   reproductionDelay: 90
   obstacleAvoidance:

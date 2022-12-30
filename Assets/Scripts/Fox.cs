@@ -29,10 +29,15 @@ public class Fox : MonoBehaviour
 
     float attackDelay;
 
+    float seaLevel;
+
     // Start is called before the first frame update
     void Start()
     {
         reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
+        target = GetMovePoint(0);
+
+        seaLevel = FindObjectOfType<MapGenerator>().seaLevel;
     }
 
     // Update is called once per frame
@@ -43,7 +48,7 @@ public class Fox : MonoBehaviour
         {
             Reproduce();
         }
-        if (transform.position.y <= -20)
+        if (transform.position.y <= -80)
         {
             transform.position = new Vector3(transform.position.x, 70, transform.position.z);
             target = GetMovePoint(0);
@@ -106,12 +111,17 @@ public class Fox : MonoBehaviour
 
         RaycastHit hit;
 
-        if (tries >= 10)
+        if (point.x <= -1)
         {
-            return point;
+            point = new Vector3(1, point.y, point.z);
         }
 
-        if (Physics.Raycast(point, Vector3.down, out hit, 200))
+        if (tries >= 10)
+        {
+            return new Vector3(randX + transform.position.x, transform.position.y, randZ + transform.position.z);
+        }
+
+        if (Physics.Raycast(point, Vector3.down, out hit, 200) && hit.point.y > seaLevel)
         {
             point = new Vector3(randX + transform.position.x, hit.point.y, randZ + transform.position.z);
         }

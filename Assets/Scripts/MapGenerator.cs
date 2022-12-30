@@ -21,6 +21,9 @@ public class MapGenerator : MonoBehaviour
     public bool randomizeSeaLevel;
 
     public float seaLevel = 5;
+    [Range(0, 1)]
+    public float foliageMask = 0.25f;
+
     [HideInInspector]
     public float maxDist;
 
@@ -41,6 +44,8 @@ public class MapGenerator : MonoBehaviour
 
     Vector2 origin;
 
+    Vector2 forestOrigin;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +57,9 @@ public class MapGenerator : MonoBehaviour
         {
             seaLevel = Random.Range(5, 27);
         }
+        int forestSeed = Random.Range(-seed, seed);
         origin = new Vector2(Mathf.Sqrt(seed), Mathf.Sqrt(seed));
+        forestOrigin = new Vector2(Mathf.Sqrt(seed + forestSeed), Mathf.Sqrt(seed + forestSeed));
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
         int zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
 
@@ -120,12 +127,11 @@ public class MapGenerator : MonoBehaviour
         {
             for (int i = 0; i < foliage.count; i++)
             {
-                ObjectSpawnData spawnPoint = GetSpawnPoint();
+                Vector3 spawnPoint = GetSpawnNoiseMaskPoint();
 
-                var obj = Instantiate(foliage.prefab, spawnPoint.point, Quaternion.Euler(spawnPoint.hitNormal));
+                var obj = Instantiate(foliage.prefab, spawnPoint, Quaternion.identity);
                 float randomScale = Random.Range(0.9f, 2);
                 obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
-
             }
         }
     }
@@ -247,6 +253,46 @@ public class MapGenerator : MonoBehaviour
         }
 
         return data;
+    }
+
+    Vector3 GetSpawnNoiseMaskPoint()
+    {
+        Vector3 point;
+
+        float xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
+        float zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
+
+        float range = ((xIslandSize + zIslandSize) / 2);
+        float randX = Random.Range(0, range);
+        float randZ = Random.Range(0, range);
+
+        point = new Vector3(randX, 70, randZ);
+
+        float forestChance = Mathf.PerlinNoise((point.x + forestOrigin.x) * .006f, (point.z + forestOrigin.y) * .006f) * 2;
+
+        float valueBarrier = foliageMask * forestChance;
+
+        RaycastHit hit;
+
+        float val = Random.value;
+
+        if (val >= valueBarrier)
+        {
+            if (Physics.Raycast(point, Vector3.down, out hit, 200, terrain) && hit.point.y > seaLevel)
+            {
+                point = new Vector3(randX, hit.point.y, randZ);
+            }
+            else
+            {
+                point = GetSpawnNoiseMaskPoint();
+            }
+        }
+        else
+        {
+            point = GetSpawnNoiseMaskPoint();
+        }
+
+        return point;
     }
 }
 [System.Serializable]

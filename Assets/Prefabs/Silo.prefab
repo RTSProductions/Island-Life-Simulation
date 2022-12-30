@@ -71,6 +71,9 @@ MonoBehaviour:
   - name: Bunny
     foodType: 2
     amountSotred: 0
+  - name: Fox
+    foodType: 3
+    amountSotred: 0
 --- !u!114 &-2672712308543340231
 MonoBehaviour:
   m_ObjectHideFlags: 0

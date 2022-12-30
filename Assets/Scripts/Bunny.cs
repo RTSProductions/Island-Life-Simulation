@@ -23,10 +23,14 @@ public class Bunny : MonoBehaviour
     [HideInInspector]
     public float reproductionTime = 0;
 
+    float seaLevel;
+
     // Start is called before the first frame update
     void Start()
     {
         reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
+        target = GetMovePoint(0);
+        seaLevel = FindObjectOfType<MapGenerator>().seaLevel;
     }
 
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class Bunny : MonoBehaviour
         {
             Reproduce();
         }
-        if (transform.position.y <= -20)
+        if (transform.position.y <= -80)
         {
             transform.position = new Vector3(transform.position.x, 70, transform.position.z);
             target = GetMovePoint(0);
@@ -100,12 +104,21 @@ public class Bunny : MonoBehaviour
 
         RaycastHit hit;
 
-        if (tries >= 10)
+        if (point.x <= -1)
         {
-            return point;
+            point = new Vector3(1, point.y, point.z);
+        }
+        if (point.z <= -1)
+        {
+            point = new Vector3(point.x, point.y, 1);
         }
 
-        if (Physics.Raycast(point, Vector3.down, out hit, 200))
+        if (tries >= 10)
+        {
+            return new Vector3(randX + transform.position.x, transform.position.y, randZ + transform.position.z);
+        }
+
+        if (Physics.Raycast(point, Vector3.down, out hit, 200) && hit.point.y > seaLevel)
         {
             point = new Vector3(randX + transform.position.x, hit.point.y, randZ + transform.position.z);
         }
@@ -132,7 +145,7 @@ public class Bunny : MonoBehaviour
                 float dist = Vector3.Distance(transform.position, other.transform.position);
                 if (other.TryGetComponent<Giant>(out Giant giant))
                 {
-
+                    target = new Vector3(-giant.transform.position.x, giant.transform.position.y, -giant.transform.position.z);
                 }
                 else if (other.TryGetComponent<Villager>(out Villager villager))
                 {

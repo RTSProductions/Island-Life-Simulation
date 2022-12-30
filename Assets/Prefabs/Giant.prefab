@@ -50,7 +50,7 @@ CapsuleCollider:
   m_Radius: 13.097333
   m_Height: 135.32404
   m_Direction: 1
-  m_Center: {x: 0, y: 69.212006, z: 1.5026674}
+  m_Center: {x: 0, y: 69.212006, z: 0}
 --- !u!54 &6394849022377154781
 Rigidbody:
   m_ObjectHideFlags: 0

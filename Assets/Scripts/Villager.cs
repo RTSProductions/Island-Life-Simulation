@@ -16,6 +16,8 @@ public class Villager : MonoBehaviour
 
     public LayerMask obstacleAvoidance;
 
+    public LayerMask vision;
+
     public Village village;
 
     public SkinnedMeshRenderer mesh;
@@ -76,13 +78,13 @@ public class Villager : MonoBehaviour
         {
             if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
             {
-                Vector3 stirAmount = transform.right;
+                Vector3 stirAmount = transform.right.normalized;
                 //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
                 moveAmount = stirAmount * speed;
             }
             else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
             {
-                Vector3 stirAmount = -transform.right;
+                Vector3 stirAmount = -transform.right.normalized;
                 //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
                 moveAmount = stirAmount * speed;
             }
@@ -129,7 +131,7 @@ public class Villager : MonoBehaviour
 
     void See()
     {
-        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius);
+        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius, vision);
 
         //float lowestFoodDist = 10000;
 
@@ -138,28 +140,29 @@ public class Villager : MonoBehaviour
             if (other.gameObject != gameObject)
             {
                 float dist = Vector3.Distance(transform.position, other.transform.position);
-                if (other.TryGetComponent<Giant>(out Giant giant))
+                if (other.gameObject.name == "Giant(Clone)") 
                 {
-                    target = giant.transform.position;
+                    target = other.transform.position;
                     if (dist <= 12)
                     {
-                        Attack(giant.GetComponent<Target>());
+                        Attack(other.GetComponent<Target>());
                     }
+                    break;
                 }
-                else if (other.TryGetComponent<Villager>(out Villager villager) && villager.village != village)
+                else if (other.gameObject.name == "Villager(Clone)" && other.transform.parent != village.transform)
                 {
-                    target = villager.transform.position;
+                    target = other.transform.position;
                     if (dist <= 3)
                     {
-                        Attack(villager.GetComponent<Target>());
+                        Attack(other.GetComponent<Target>());
                     }
                 }
                 else if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "House(Clone)" && other.transform.parent != this.transform.parent || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != this.transform.parent)
                 {
-                    Target structure = other.GetComponent<Target>();
                     target = other.transform.position;
                     if (dist <= 5)
                     {
+                        Target structure = other.GetComponent<Target>();
                         if (structure.health <= damage)
                         {
                             if (other.gameObject.name == "Silo(Clone)" || other.gameObject.name == "Smiths Hut(Clone)")
@@ -171,21 +174,21 @@ public class Villager : MonoBehaviour
                         Attack(structure);
                     }
                 }
-                else if (other.TryGetComponent<Bunny>(out Bunny bunny))
+                else if (other.gameObject.name == "Bunny(Clone)")
                 {
-                    target = bunny.transform.position;
+                    target = other.transform.position;
                     if (dist <= 3)
                     {
-                        Attack(bunny.GetComponent<Target>());
+                        Attack(other.GetComponent<Target>());
                     }
 
                 }
-                else if (other.TryGetComponent<Fox>(out Fox fox))
+                else if (other.gameObject.name == "Fox(Clone)")
                 {
-                    target = fox.transform.position;
+                    target = other.transform.position;
                     if (dist <= 3)
                     {
-                        Attack(fox.GetComponent<Target>());
+                        Attack(other.GetComponent<Target>());
                     }
 
                 }

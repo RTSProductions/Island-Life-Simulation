@@ -51,7 +51,7 @@ MonoBehaviour:
   rb: {fileID: 5380491519464390212}
   food: {fileID: 5761635545084450209, guid: d48f4cfd783cc4b5e8a7ad460b6c947a, type: 3}
   speed: 12
-  visionRadius: 20
+  visionRadius: 15
   reproductionDelay: 90
   attackRate: 0.5
   damage: 15

@@ -116,8 +116,10 @@ public class MapGenerator : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         PlaceFoliage();
+        yield return new WaitForSeconds(1f);
         PlaceAnimals();
-        SpawnVillages();
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(SpawnVillages());
     }
 
 
@@ -132,6 +134,7 @@ public class MapGenerator : MonoBehaviour
                 var obj = Instantiate(foliage.prefab, spawnPoint, Quaternion.identity);
                 float randomScale = Random.Range(0.9f, 2);
                 obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
             }
         }
     }
@@ -145,11 +148,12 @@ public class MapGenerator : MonoBehaviour
                 ObjectSpawnData spawnPoint = GetSpawnPoint();
 
                 var obj = Instantiate(animal.prefab, spawnPoint.point, Quaternion.identity);
+
             }
         }
     }
 
-    void SpawnVillages()
+    IEnumerator SpawnVillages()
     {
         for (int i = 0; i < villages.count; i++)
         {
@@ -166,19 +170,24 @@ public class MapGenerator : MonoBehaviour
                 var house = Instantiate(villages.house, housePoint.point, Quaternion.LookRotation(housePoint.hitNormal));
                 house.transform.parent = village.transform;
 
-            }
-            for (int j = 0; j < villages.population; j++)
-            {
-                var villager = Instantiate(villages.villager, villagePoint.point, Quaternion.identity);
-                villager.transform.parent = village.transform;
-                villager.GetComponent<Villager>().village = vil;
-                villager.GetComponent<Villager>().mesh.sharedMaterial = vil.SkinColor;
+                yield return new WaitForSeconds(0.05f);
+
             }
             for (int j = 0; j < villages.requiredStructures.Length; j++)
             {
                 ObjectSpawnData structurePoint = GetVillagePoint(village.transform.position);
                 var structure = Instantiate(villages.requiredStructures[j], structurePoint.point, Quaternion.LookRotation(structurePoint.hitNormal));
                 structure.transform.parent = village.transform;
+                yield return new WaitForSeconds(0.05f);
+            }
+            for (int j = 0; j < villages.population; j++)
+            {
+                Vector3 villagerSpawnPoint = vil.GetVillagePoint();
+                var villager = Instantiate(villages.villager, villagerSpawnPoint, Quaternion.identity);
+                villager.transform.parent = village.transform;
+                villager.GetComponent<Villager>().village = vil;
+                villager.GetComponent<Villager>().mesh.sharedMaterial = vil.SkinColor;
+                yield return new WaitForSeconds(0.05f);
             }
         }
     }

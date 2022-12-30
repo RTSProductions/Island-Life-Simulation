@@ -80,12 +80,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6466743974003783996}
   speed: 10
-  visionRadius: 50
+  visionRadius: 30
   attackRate: 0.5
   damage: 10
   obstacleAvoidance:
     serializedVersion: 2
     m_Bits: 1921
+  vision:
+    serializedVersion: 2
+    m_Bits: 1792
   village: {fileID: 0}
   mesh: {fileID: 3242625897908951431}
 --- !u!114 &8865735570552406569

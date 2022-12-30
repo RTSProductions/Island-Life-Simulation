@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 184131203}
   - component: {fileID: 184131204}
+  - component: {fileID: 184131205}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -168,6 +169,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.33, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &184131205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184131202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52772d80014974918a51328853d7e96f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023206291}
   - component: {fileID: 1023206292}
+  - component: {fileID: 1023206293}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -537,6 +551,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.33, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1023206293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023206290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52772d80014974918a51328853d7e96f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1040285547
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,6 +573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1040285548}
   - component: {fileID: 1040285549}
+  - component: {fileID: 1040285550}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -582,6 +609,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.33, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1040285550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040285547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52772d80014974918a51328853d7e96f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1077838987
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +930,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1394566590}
-  - component: {fileID: 1394566591}
   m_Layer: 0
   m_Name: Death Barrier
   m_TagString: Untagged
@@ -918,18 +956,6 @@ Transform:
   m_Father: {fileID: 1077838991}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1394566591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1394566589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52772d80014974918a51328853d7e96f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1621222845
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,6 +966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1621222846}
   - component: {fileID: 1621222847}
+  - component: {fileID: 1621222848}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -975,6 +1002,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.33, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1621222848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621222845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52772d80014974918a51328853d7e96f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1941588201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,7 +1414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5762134723622706129, guid: c4b80417415a54855b6b447d0af4d70d, type: 3}
       propertyPath: m_Name
-      value: Giant
+      value: Giant(Clone)
       objectReference: {fileID: 0}
     - target: {fileID: 5762134723622706129, guid: c4b80417415a54855b6b447d0af4d70d, type: 3}
       propertyPath: m_IsActive

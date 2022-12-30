@@ -35,7 +35,7 @@ public class Fox : MonoBehaviour
     void Start()
     {
         reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
-        target = GetMovePoint(0);
+        target = new Vector3(600, 20, 80);
 
         seaLevel = FindObjectOfType<MapGenerator>().seaLevel;
     }
@@ -115,6 +115,10 @@ public class Fox : MonoBehaviour
         {
             point = new Vector3(1, point.y, point.z);
         }
+        if (point.z <= -1)
+        {
+            point = new Vector3(point.x, point.y, 1);
+        }
 
         if (tries >= 10)
         {
@@ -145,13 +149,15 @@ public class Fox : MonoBehaviour
         {
             if (other.gameObject != gameObject)
             {
+                Vector3 runPos = (transform.position - other.transform.position).normalized;
+
                 float dist = Vector3.Distance(transform.position, other.transform.position); if (other.TryGetComponent<Giant>(out Giant giant))
                 {
-                    target = new Vector3(-giant.transform.position.x, giant.transform.position.y, -giant.transform.position.z);
+                    target = runPos;
                 }
                 else if (other.TryGetComponent<Villager>(out Villager villager))
                 {
-                    target = new Vector3(-villager.transform.position.x, villager.transform.position.y, -villager.transform.position.z);
+                    target = runPos;
 
                 }
                 else if (other.TryGetComponent<Food>(out Food food) && food.foodType == FoodType.Bunny)
@@ -186,6 +192,7 @@ public class Fox : MonoBehaviour
         var child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
         child.GetComponent<Fox>().reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
         reproductionTime = Time.time + reproductionDelay;
+        child.gameObject.name = this.gameObject.name;
     }
 
     void Attack(Target attacked)

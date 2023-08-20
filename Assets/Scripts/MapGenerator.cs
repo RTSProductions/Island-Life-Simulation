@@ -21,6 +21,9 @@ public class MapGenerator : MonoBehaviour
     public bool randomizeSeaLevel;
 
     public float seaLevel = 5;
+
+    public float floatingPower = 15;
+
     [Range(0, 1)]
     public float foliageMask = 0.25f;
 
@@ -55,7 +58,7 @@ public class MapGenerator : MonoBehaviour
         }
         if (randomizeSeaLevel == true)
         {
-            seaLevel = Random.Range(5, 27);
+            seaLevel = Random.Range(5, 36);
         }
         int forestSeed = Random.Range(-seed, seed);
         origin = new Vector2(Mathf.Sqrt(seed), Mathf.Sqrt(seed));
@@ -63,18 +66,6 @@ public class MapGenerator : MonoBehaviour
         int xIslandSize = xSize * chunk.GetComponent<MeshGenerator>().xSize;
         int zIslandSize = zSize * chunk.GetComponent<MeshGenerator>().zSize;
 
-        //falloffMap = new float[xIslandSize, zIslandSize];
-        //for (int i = 0; i < xIslandSize; i++)
-        //{
-        //    for (int j = 0; j < zIslandSize; j++)
-        //    {
-        //        float x = i / (float)xIslandSize * 2 - 1;
-        //        float z = j / (float)zIslandSize * 2 - 1;
-
-        //        float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
-        //        falloffMap[i, j] = Evaluate(value);
-        //    }
-        //}
         float midX = xIslandSize / 2;
         float midZ = zIslandSize / 2;
         midPoint = new GameObject("Mid Point").transform;
@@ -119,7 +110,7 @@ public class MapGenerator : MonoBehaviour
         yield return new WaitForSeconds(1f);
         PlaceAnimals();
         yield return new WaitForSeconds(1f);
-        StartCoroutine(SpawnVillages());
+        SpawnVillages();
     }
 
 
@@ -148,37 +139,36 @@ public class MapGenerator : MonoBehaviour
                 ObjectSpawnData spawnPoint = GetSpawnPoint();
 
                 var obj = Instantiate(animal.prefab, spawnPoint.point, Quaternion.identity);
-
             }
         }
     }
 
-    IEnumerator SpawnVillages()
+    void SpawnVillages()
     {
         for (int i = 0; i < villages.count; i++)
         {
             ObjectSpawnData villagePoint = GetSpawnPoint();
-            var village = new GameObject("Village " + i);
+
+            int randomName = Random.Range(0, villages.possibleNames.Length - 1);
+
+            var village = new GameObject(villages.possibleNames[randomName]);
             village.transform.position = villagePoint.point;
             Village vil = village.AddComponent<Village>();
             vil.generator = this;
             int index = Random.Range(0, villages.skinColors.Length - 1);
             vil.SkinColor = villages.skinColors[index];
+            vil.citizens = new List<Transform>();
             for (int j = 0; j < Random.Range(3, 10); j++)
             {
                 ObjectSpawnData housePoint = GetVillagePoint(village.transform.position);
                 var house = Instantiate(villages.house, housePoint.point, Quaternion.LookRotation(housePoint.hitNormal));
                 house.transform.parent = village.transform;
-
-                yield return new WaitForSeconds(0.05f);
-
             }
             for (int j = 0; j < villages.requiredStructures.Length; j++)
             {
                 ObjectSpawnData structurePoint = GetVillagePoint(village.transform.position);
                 var structure = Instantiate(villages.requiredStructures[j], structurePoint.point, Quaternion.LookRotation(structurePoint.hitNormal));
                 structure.transform.parent = village.transform;
-                yield return new WaitForSeconds(0.05f);
             }
             for (int j = 0; j < villages.population; j++)
             {
@@ -187,17 +177,11 @@ public class MapGenerator : MonoBehaviour
                 villager.transform.parent = village.transform;
                 villager.GetComponent<Villager>().village = vil;
                 villager.GetComponent<Villager>().mesh.sharedMaterial = vil.SkinColor;
-                yield return new WaitForSeconds(0.05f);
+                villager.GetComponent<Villager>().id = i + j;
+                vil.citizens.Add(villager.transform);
             }
         }
     }
-
-    //public float FallOffMap(int x, int y)
-    //{
-    //    float falloff = falloffMap[x, y];
-
-    //    return falloff;
-    //}
 
     public static float Evaluate(float value)
     {
@@ -235,7 +219,7 @@ public class MapGenerator : MonoBehaviour
         return data;
     }
 
-    ObjectSpawnData GetVillagePoint(Vector3 village)
+    public ObjectSpawnData GetVillagePoint(Vector3 village)
     {
         ObjectSpawnData data = new ObjectSpawnData();
 
@@ -321,6 +305,8 @@ public class VillageSpawner
     public GameObject house;
 
     public GameObject[] requiredStructures;
+
+    public string[] possibleNames;
 
     public int count;
 

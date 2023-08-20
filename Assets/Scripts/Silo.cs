@@ -6,16 +6,22 @@ public class Silo : MonoBehaviour
 {
     public FoodStorage[] storage;
 
+    Village village;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        village = GetComponentInParent<Village>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (storage[0].amountSotred >= 20 && !village.HasAdvancement(Advancement.crops))
+        {
+            village.Achive(Advancement.crops);
+            village.Achive(Advancement.axe);
+        }
     }
 
     public void Add(FoodType foodType, int amount)

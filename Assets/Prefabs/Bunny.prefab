@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4838013160052970222}
   - component: {fileID: 5214527057239660614}
   - component: {fileID: 8481341869401236228}
+  - component: {fileID: -5163516567237638582}
   m_Layer: 8
   m_Name: Bunny
   m_TagString: Untagged
@@ -81,10 +82,13 @@ MonoBehaviour:
   food: {fileID: 3444365056706504912, guid: a9736107be3f94c41be502c2a0e5e80a, type: 3}
   speed: 11
   visionRadius: 15
-  reproductionDelay: 90
+  reproductionDelay: 40
   obstacleAvoidance:
     serializedVersion: 2
     m_Bits: 1921
+  vision:
+    serializedVersion: 2
+    m_Bits: 768
   reproductionTime: 0
 --- !u!114 &8481341869401236228
 MonoBehaviour:
@@ -99,6 +103,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  maxHealth: 100
+--- !u!114 &-5163516567237638582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4642918572124277928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e03af5e83aaef4229aca593b70dca90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7124181724545684583
 PrefabInstance:
   m_ObjectHideFlags: 0

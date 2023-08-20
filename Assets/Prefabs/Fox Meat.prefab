@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2814824700555671493}
   - component: {fileID: 210898752023914634}
   - component: {fileID: 639837041301034272}
+  - component: {fileID: -4014466471328107838}
   m_Layer: 9
   m_Name: Fox Meat
   m_TagString: Untagged
@@ -128,3 +129,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodType: 3
+--- !u!114 &-4014466471328107838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761635545084450209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e03af5e83aaef4229aca593b70dca90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

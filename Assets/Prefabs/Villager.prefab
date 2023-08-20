@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6466743974003783996}
   - component: {fileID: 4429139485649193967}
   - component: {fileID: 8865735570552406569}
+  - component: {fileID: -3173481688532965760}
   m_Layer: 8
   m_Name: Villager
   m_TagString: Untagged
@@ -49,7 +50,7 @@ CapsuleCollider:
   m_Radius: 0.32
   m_Height: 1.9348145
   m_Direction: 1
-  m_Center: {x: 0, y: 0.947937, z: 0}
+  m_Center: {x: 0, y: 0.21, z: 0}
 --- !u!54 &6466743974003783996
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -79,17 +80,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6466743974003783996}
+  occupation: 0
+  id: 0
   speed: 10
-  visionRadius: 30
+  visionRadius: 15
   attackRate: 0.5
   damage: 10
+  seaLevel: 0
   obstacleAvoidance:
     serializedVersion: 2
     m_Bits: 1921
   vision:
     serializedVersion: 2
     m_Bits: 1792
+  giant:
+    serializedVersion: 2
+    m_Bits: 2048
   village: {fileID: 0}
+  city: {fileID: 0}
   mesh: {fileID: 3242625897908951431}
 --- !u!114 &8865735570552406569
 MonoBehaviour:
@@ -104,6 +112,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  maxHealth: 100
+--- !u!114 &-3173481688532965760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5689835426879535664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e03af5e83aaef4229aca593b70dca90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterDrag: 3
+  waterAngularDrag: 1
+  airDrag: 0
+  airAngularDrag: 0.05
 --- !u!1001 &6471785492470062105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 85131b468b02b4297ad2666e32846fd6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.78
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 85131b468b02b4297ad2666e32846fd6, type: 3}
       propertyPath: m_LocalPosition.z

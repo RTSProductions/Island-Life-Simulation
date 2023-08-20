@@ -18,6 +18,8 @@ public class Giant : MonoBehaviour
 
     public LayerMask objectLayer;
 
+    public LayerMask vision;
+
     public SkinnedMeshRenderer mesh;
 
     Vector3 moveAmount;
@@ -97,7 +99,7 @@ public class Giant : MonoBehaviour
 
     void See()
     {
-        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius);
+        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius, vision);
 
         //float lowestFoodDist = 10000;
 
@@ -106,14 +108,7 @@ public class Giant : MonoBehaviour
             if (other.gameObject != gameObject)
             {
                 float dist = Vector3.Distance(transform.position, other.transform.position);
-                //if (other.TryGetComponent<Villager>(out Villager villager))
-                //{
-                //    //target = villager.transform.position;
-                //    if (dist <= 40)
-                //    {
-                //        Attack(villager.GetComponent<Target>());
-                //    }
-                //}
+
                 if (other.gameObject.name == "House(Clone)")
                 {
                     Target structure = other.GetComponent<Target>();
@@ -123,47 +118,7 @@ public class Giant : MonoBehaviour
                         Attack(structure);
                     }
                 }
-                //else if (other.TryGetComponent<Bunny>(out Bunny bunny))
-                //{
-                //    target = bunny.transform.position;
-                //    if (dist <= 3)
-                //    {
-                //        Attack(bunny.GetComponent<Target>());
-                //    }
 
-                //}
-                //else if (other.TryGetComponent<Fox>(out Fox fox))
-                //{
-                //    target = fox.transform.position;
-                //    if (dist <= 3)
-                //    {
-                //        Attack(fox.GetComponent<Target>());
-                //    }
-
-                //}
-                //else if (other.TryGetComponent<Food>(out Food food))
-                //{
-                //    target = food.transform.position;
-                //    if (dist <= 5)
-                //    {
-                //        Silo silo = village.GetComponentInChildren<Silo>();
-                //        silo.Add(food.foodType, 1);
-                //        target = silo.transform.position;
-                //        Destroy(food.gameObject);
-                //    }
-
-                //}
-                //else if (other.TryGetComponent<Resource>(out Resource resource))
-                //{
-                //    target = resource.transform.position;
-                //    if (dist <= 5)
-                //    {
-                //        SmithsHut smithsHut = village.GetComponentInChildren<SmithsHut>();
-                //        smithsHut.Add(resource.resourceType, 1);
-                //        target = smithsHut.transform.position;
-                //        Destroy(resource.gameObject, 3);
-                //    }
-                //}
             }
         }
     }

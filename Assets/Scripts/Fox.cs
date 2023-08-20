@@ -20,6 +20,8 @@ public class Fox : MonoBehaviour
 
     public LayerMask obstacleAvoidance;
 
+    public LayerMask vision;
+
     Vector3 moveAmount;
 
     Vector3 target;
@@ -34,7 +36,7 @@ public class Fox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
+        reproductionTime = Random.Range(50, 1000) + reproductionDelay;
         target = new Vector3(600, 20, 80);
 
         seaLevel = FindObjectOfType<MapGenerator>().seaLevel;
@@ -72,24 +74,24 @@ public class Fox : MonoBehaviour
 
     void Move()
     {
-        Ray forward = new Ray(transform.position + (Vector3.up * 0.5f), transform.forward);
-        Ray right = new Ray(transform.position + (Vector3.up * 0.5f), transform.right);
-        Ray left = new Ray(transform.position + (Vector3.up * 0.5f), -transform.right);
-        if (Physics.Raycast(forward, 0.32f * 2, obstacleAvoidance))
-        {
-            if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
-            {
-                Vector3 stirAmount = transform.right;
-                //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-                moveAmount = stirAmount * speed;
-            }
-            else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
-            {
-                Vector3 stirAmount = -transform.right;
-                //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-                moveAmount = stirAmount * speed;
-            }
-        }
+        //Ray forward = new Ray(transform.position + (Vector3.up * 0.5f), transform.forward);
+        //Ray right = new Ray(transform.position + (Vector3.up * 0.5f), transform.right);
+        //Ray left = new Ray(transform.position + (Vector3.up * 0.5f), -transform.right);
+        //if (Physics.Raycast(forward, 0.32f * 2, obstacleAvoidance))
+        //{
+        //    if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
+        //    {
+        //        Vector3 stirAmount = transform.right;
+        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
+        //        moveAmount = stirAmount * speed;
+        //    }
+        //    else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
+        //    {
+        //        Vector3 stirAmount = -transform.right;
+        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
+        //        moveAmount = stirAmount * speed;
+        //    }
+        //}
         rb.MovePosition(transform.position + moveAmount * Time.fixedDeltaTime);
     }
 
@@ -141,7 +143,7 @@ public class Fox : MonoBehaviour
 
     void See()
     {
-        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius);
+        Collider[] others = Physics.OverlapSphere(transform.position, visionRadius, vision);
 
         //float lowestFoodDist = 10000;
 
@@ -151,11 +153,17 @@ public class Fox : MonoBehaviour
             {
                 Vector3 runPos = (transform.position - other.transform.position).normalized;
 
-                float dist = Vector3.Distance(transform.position, other.transform.position); if (other.TryGetComponent<Giant>(out Giant giant))
+                if (runPos.y <= seaLevel)
+                {
+                    runPos = GetMovePoint(0);
+                }
+
+                float dist = Vector3.Distance(transform.position, other.transform.position);
+                if (other.gameObject.name == "Giant(Clone)")
                 {
                     target = runPos;
                 }
-                else if (other.TryGetComponent<Villager>(out Villager villager))
+                else if (other.gameObject.name == "Villager(Clone)")
                 {
                     target = runPos;
 
@@ -175,12 +183,12 @@ public class Fox : MonoBehaviour
                     }
 
                 }
-                else if (other.TryGetComponent<Bunny>(out Bunny bunny))
+                else if (other.gameObject.name == "Bunny(Clone)")
                 {
-                    target = bunny.transform.position;
+                    target = other.transform.position;
                     if (dist <= 3)
                     {
-                        Attack(bunny.GetComponent<Target>());
+                        Attack(other.GetComponent<Target>());
                     }
                 }
             }
@@ -190,7 +198,7 @@ public class Fox : MonoBehaviour
     void Reproduce()
     {
         var child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
-        child.GetComponent<Fox>().reproductionTime = Random.Range(-reproductionDelay, 1000) + reproductionDelay;
+        child.GetComponent<Fox>().reproductionTime = Random.Range(30, 1000) + reproductionDelay;
         reproductionTime = Time.time + reproductionDelay;
         child.gameObject.name = this.gameObject.name;
     }

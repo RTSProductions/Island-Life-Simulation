@@ -79,7 +79,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   range: 7
-  appleSpawnRate: 70
+  appleSpawnRate: 120
 --- !u!54 &6894888187490147546
 Rigidbody:
   m_ObjectHideFlags: 0

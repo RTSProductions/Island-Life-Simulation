@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 424279996733740338}
   - component: {fileID: 5665153873327744305}
   - component: {fileID: 2747136903431076929}
+  - component: {fileID: -8732433080193227579}
   m_Layer: 9
   m_Name: Bunny Meat
   m_TagString: Untagged
@@ -128,3 +129,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodType: 2
+--- !u!114 &-8732433080193227579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3444365056706504912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e03af5e83aaef4229aca593b70dca90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

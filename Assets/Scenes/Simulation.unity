@@ -940,7 +940,7 @@ MonoBehaviour:
     count: 120
   - name: Fern
     prefab: {fileID: 1076873970968766207, guid: 254cc8c9fbf0a4d48bcf1f2dd0bab932, type: 3}
-    count: 200
+    count: 400
   - name: Apple
     prefab: {fileID: 6512942208734659838, guid: 4df6bcf2d62294d51823c3f96ad11c4e, type: 3}
     count: 1
@@ -957,6 +957,7 @@ MonoBehaviour:
   villages:
     villager: {fileID: 5689835426879535664, guid: 72128ea493afa4cafb209a0a7e0a347e, type: 3}
     house: {fileID: 5703046057555214956, guid: e11cedd40069048a584627fe2937f95f, type: 3}
+    fernFarm: {fileID: 7181974902648268850, guid: 2d18af7871e434881aaa7f76802f5037, type: 3}
     requiredStructures:
     - {fileID: 3072479968773067344, guid: 684e73fa7720d436d882ad94f4328a13, type: 3}
     - {fileID: 2323953275062508369, guid: 7dbbee827eb5a427499a8db985ef8c29, type: 3}
@@ -968,6 +969,12 @@ MonoBehaviour:
     - Riverside
     - Riverdale
     - Existancia
+    - "Jab\xF3n"
+    - Thrupolia
+    - Chord
+    - Secantina
+    - The Elllis
+    - espania
     count: 4
     population: 25
     maxDist: 25

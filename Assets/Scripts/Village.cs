@@ -17,6 +17,8 @@ public class Village : MonoBehaviour
 
     public List<Transform> cities;
 
+    public List<Transform> farms;
+
     public List<Transform> citizens;
 
     public List<Job> jobs;
@@ -26,6 +28,7 @@ public class Village : MonoBehaviour
     {
         advancements = new List<Advancement>();
         cities = new List<Transform>();
+        farms = new List<Transform>();
 
         jobs = new List<Job>(0);
     }
@@ -177,11 +180,13 @@ public class Village : MonoBehaviour
     {
         societyLevel++;
 
-        //StartCoroutine(NewCity(Random.Range(3, 10) + societyLevel));
-
+        for (int i = 0; i < 1; i++)
+        {
+            StartCoroutine(NewCity(Random.Range(3, 10)));
+        }
         for (int i = 0; i < societyLevel; i++)
         {
-            StartCoroutine(NewCity(Random.Range(3, 10) + societyLevel));
+            NewFarm();
         }
     }
 
@@ -199,41 +204,26 @@ public class Village : MonoBehaviour
         city.transform.parent = transform;
         cities.Add(city.transform);
 
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 villagerSpawnPoint = cityComp.GetVillagePoint();
-            var villager = Instantiate(generator.villages.villager, villagerSpawnPoint, Quaternion.identity);
-            villager.transform.parent = transform;
-            Villager vil = villager.GetComponent<Villager>();
-            vil.village = this;
-            vil.city = cityComp;
-            vil.mesh.sharedMaterial = SkinColor;
-            cityComp.citizens.Add(villager.transform);
-            citizens.Add(villager.transform);
-
-            int randomJob = Random.Range(0, jobs.Capacity - 1);
-
-            vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage);
-        }
-
         Job lumberjacks = GetJobClass(Occupation.lumberjack);
 
-        float timeToBuild = 60 * houseAmount;
+        float timeToBuild = 30 * houseAmount;
 
         foreach (Villager lumberjack in lumberjacks.occupents)
         {
             lumberjack.GoTo(cityComp.GetVillagePoint());
         }
 
-        float lessDelay = lumberjacks.occupents.Capacity / 2;
+        float lessDelay = lumberjacks.occupents.Count / 2;
 
         timeToBuild /= lessDelay;
 
         SmithsHut smithsHut = GetComponentInChildren<SmithsHut>();
 
+        Silo silo = GetComponentInChildren<Silo>();
+
         for (int i = 0; i < houseAmount; i++)
         {
-            if (smithsHut.storage[0].amountSotred < 20)
+            if (smithsHut.storage[0].amountSotred < 20 && silo.storage[0].amountSotred < 10)
             {
                 break;
             }
@@ -251,7 +241,49 @@ public class Village : MonoBehaviour
             house.transform.parent = city.transform;
 
             smithsHut.storage[0].amountSotred -= 20;
+
+            for (int j = 0; j < 3; j++)
+            {
+                Vector3 villagerSpawnPoint = cityComp.GetVillagePoint();
+                var villager = Instantiate(generator.villages.villager, new Vector3(villagerSpawnPoint.x, 100, villagerSpawnPoint.z), Quaternion.identity);
+                villager.transform.parent = transform;
+                Villager vil = villager.GetComponent<Villager>();
+                vil.village = this;
+                vil.city = cityComp;
+                vil.mesh.sharedMaterial = SkinColor;
+                cityComp.citizens.Add(villager.transform);
+                citizens.Add(villager.transform);
+
+                int randomJob = Random.Range(0, jobs.Capacity - 1);
+
+                vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage);
+            }
+
+            silo.storage[0].amountSotred -= 10;
         }
+
+    }
+
+    void NewFarm()
+    {
+        SmithsHut smithsHut = GetComponentInChildren<SmithsHut>();
+
+        Silo silo = GetComponentInChildren<Silo>();
+
+        if (smithsHut.storage[0].amountSotred < 5 && silo.storage[0].amountSotred >= 15 && HasAdvancement(Advancement.crops))
+        {
+            return;
+        }
+        Vector3 newFarmPoint = CreateCityPoint();
+        var farm = Instantiate(generator.villages.fernFarm, new Vector3(newFarmPoint.x, 210, newFarmPoint.z), Quaternion.identity, transform);
+
+        Job farmers = GetJobClass(Occupation.farmer);
+
+        foreach (Villager lumberjack in farmers.occupents)
+        {
+            lumberjack.GoTo(farm.transform.position);
+        }
+        farms.Add(farm.transform);
 
     }
 

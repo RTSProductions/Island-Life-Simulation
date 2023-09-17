@@ -319,6 +319,8 @@ public class VillageSpawner
 
     public GameObject house;
 
+    public GameObject fernFarm;
+
     public GameObject[] requiredStructures;
 
     public string[] possibleNames;

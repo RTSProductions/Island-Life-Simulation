@@ -21,7 +21,7 @@ public class SmithsHut : MonoBehaviour
         {
             village.Achive(Advancement.pickaxe);
         }
-        if (storage[0].amountSotred >= 100 && storage[1].amountSotred >= 300 && !village.HasAdvancement(Advancement.sword))
+        if (storage[0].amountSotred >= 100 && storage[1].amountSotred >= 300 && village.citizens.Count >= 36 && !village.HasAdvancement(Advancement.sword))
         {
             village.Achive(Advancement.sword);
         }

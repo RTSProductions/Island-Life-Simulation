@@ -65,7 +65,7 @@ public class Villager : MonoBehaviour
                 target = city.GetVillagePoint();
             }
         }
-        float distToTarget = Vector3.Distance(transform.position, target);
+        float distToTarget = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(target.x, 0, target.z));
         if (distToTarget <= 2)
         {
             if (LightingManager.night == true)
@@ -188,7 +188,7 @@ public class Villager : MonoBehaviour
                         }
                     //}
                 }
-                else if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != village.transform || other.gameObject.name == "House(Clone)" && other.transform.parent != village.transform && other.transform.parent.parent != village.transform || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != village.transform)
+                else if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != village.transform || other.gameObject.name == "House(Clone)" && other.transform.parent != village.transform && other.transform.parent.parent != village.transform || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != village.transform || other.gameObject.name == "Fence" && other.transform.parent.parent != village.transform)
                 {
                     if (occupation == Occupation.basic || occupation == Occupation.knight)
                     {
@@ -268,6 +268,20 @@ public class Villager : MonoBehaviour
                             smithsHut.Add(resource.resourceType, 1);
                             target = smithsHut.transform.position;
                             Destroy(resource.gameObject);
+                        }
+                    }
+                }
+                else if (other.name == "Fern Farn(Clone)" && occupation == Occupation.farmer && other.transform.parent == village.transform)
+                {
+                    target = other.transform.position;
+                    if (dist <= 5)
+                    {
+                        FernFarm farm = other.GetComponent<FernFarm>();
+                        if (farm.currentFernAge >= 1)
+                        {
+                            farm.Harvest();
+                            Silo silo = village.GetComponentInChildren<Silo>();
+                            silo.Add(food.foodType, 15);
                         }
                     }
                 }

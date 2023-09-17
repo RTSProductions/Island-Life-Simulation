@@ -921,8 +921,11 @@ MonoBehaviour:
   randomizeSeaLevel: 0
   seaLevel: 28
   floatingPower: 25
-  foliageMask: 0.95
+  foliageMask: 0.85
   maxDist: 0
+  vertexID: 0
+  xVertexID: 0
+  zVertexID: 0
   terrain:
     serializedVersion: 2
     m_Bits: 128
@@ -931,7 +934,7 @@ MonoBehaviour:
   Foliage:
   - name: Tree
     prefab: {fileID: 497721982288463426, guid: 46d44576462f1439398203d7de03004f, type: 3}
-    count: 400
+    count: 700
   - name: Rock
     prefab: {fileID: 3934876279841137907, guid: b589243873ec443fcab70d22f3ec1d7a, type: 3}
     count: 120

@@ -44,8 +44,13 @@ public class MeshGenerator : MonoBehaviour
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
+            int zId = z + zIndex * zSize;
+
             for (int x = 0; x <= xSize; x++)
             {
+                generator.vertexID++;
+                int id = generator.vertexID;
+                int xId = x + xIndex * xSize;
                 float y = 0;
                 float opacity = 1;
                 float nosieScale = .006f;
@@ -53,14 +58,16 @@ public class MeshGenerator : MonoBehaviour
                 {
                     float currentY = Mathf.PerlinNoise((x + transform.position.x + origin.x) * nosieScale, (z + transform.position.z + origin.y) * nosieScale) * 50;
                     currentY /= opacity;
+                    currentY -= generator.falloffMap[xId, zId];
                     y += currentY;
                     opacity *= 2;
                     nosieScale *= 2;
                 }
-                float distanceFromMiddleFallOff = Vector3.Distance(new Vector3(transform.position.x + x, 0, transform.position.z + z), generator.midPoint.position) / 90;
-                distanceFromMiddleFallOff = Mathf.Pow(distanceFromMiddleFallOff, 2);
+                //float distanceFromMiddleFallOff = Vector3.Distance(new Vector3(transform.position.x + x, 0, transform.position.z + z), generator.midPoint.position) / generator.fallOffPower;
+                //distanceFromMiddleFallOff = Mathf.Pow(distanceFromMiddleFallOff, 2);
                 //distanceFromMiddleFallOff /= 10;
-                y -= distanceFromMiddleFallOff;
+                //y -= distanceFromMiddleFallOff;
+
 
                 vertices[i] = new Vector3(x, y, z);
                 i++;

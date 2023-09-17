@@ -28,7 +28,20 @@ public class MapGenerator : MonoBehaviour
     public float foliageMask = 0.25f;
 
     [HideInInspector]
+    public float[,] falloffMap;
+
+
+    [HideInInspector]
     public float maxDist;
+
+    [HideInInspector]
+    public int vertexID = 0;
+
+    [HideInInspector]
+    public int xVertexID = 0;
+
+    [HideInInspector]
+    public int zVertexID = 0;
 
     public LayerMask terrain;
 
@@ -84,6 +97,8 @@ public class MapGenerator : MonoBehaviour
 
     void GenerateMap()
     {
+        MeshGenerator chunkPart = chunk.GetComponent<MeshGenerator>();
+        falloffMap = FalloffMapGenerator.GenerateFalloffMap((xSize * chunkPart.xSize) + 1, (zSize * chunkPart.zSize) + 1);
         int index = 0;
         for (int z = 0; z < zSize; z++)
         {
@@ -91,7 +106,7 @@ public class MapGenerator : MonoBehaviour
             {
                 var chunk = Instantiate(this.chunk, transform);
 
-                chunk.transform.position = new Vector3(this.chunk.GetComponent<MeshGenerator>().xSize * x, 0, this.chunk.GetComponent<MeshGenerator>().zSize * z);
+                chunk.transform.position = new Vector3(chunkPart.xSize * x, 0, chunkPart.zSize * z);
 
                 chunk.GetComponent<MeshGenerator>().index = index;
                 chunk.GetComponent<MeshGenerator>().xIndex = x;
@@ -269,7 +284,7 @@ public class MapGenerator : MonoBehaviour
 
         float val = Random.value;
 
-        if (val >= valueBarrier)
+        if (forestChance >= foliageMask)
         {
             if (Physics.Raycast(point, Vector3.down, out hit, 200, terrain) && hit.point.y > seaLevel)
             {

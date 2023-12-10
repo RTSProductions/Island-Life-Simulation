@@ -144,28 +144,28 @@ public class Bunny : MonoBehaviour
         {
             if (other.gameObject != gameObject)
             {
-                Vector3 runPos = (transform.position - other.transform.position).normalized;
-                if (runPos.y <= seaLevel)
-                {
-                    runPos = GetMovePoint(0);
-                }
+                //Vector3 runPos = (other.transform.position - transform.position) + new Vector3(10, 0, 10);
+                //if (runPos.y <= seaLevel)
+                //{
+                //    runPos = GetMovePoint(0);
+                //}
                 float dist = Vector3.Distance(transform.position, other.transform.position);
-                if (other.gameObject.name == "Giant(Clone)")
-                {
-                    target = runPos;
-                    break;
-                }
-                else if (other.gameObject.name == "Villager(Clone)")
-                {
-                    target = runPos;
+                //if (other.gameObject.name == "Giant(Clone)")
+                //{
+                //    target = runPos;
+                //    break;
+                //}
+                //else if (other.gameObject.name == "Villager(Clone)")
+                //{
+                //    target = runPos;
 
-                }
-                else if (other.gameObject.name == "Fox(Clone)")
-                {
-                    target = runPos;
+                //}
+                //else if (other.gameObject.name == "Fox(Clone)")
+                //{
+                //    target = runPos;
 
-                }
-                else if (other.TryGetComponent<Food>(out Food food))
+                //}
+                /*else*/ if (other.TryGetComponent<Food>(out Food food))
                 {
                     if (food.foodType == FoodType.Apple || food.foodType == FoodType.Fern)
                     {

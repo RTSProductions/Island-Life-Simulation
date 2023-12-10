@@ -151,21 +151,21 @@ public class Fox : MonoBehaviour
         {
             if (other.gameObject != gameObject)
             {
-                Vector3 runPos = (transform.position - other.transform.position).normalized;
+                //Vector3 runPos = (transform.position - other.transform.position).normalized;
 
-                if (runPos.y <= seaLevel)
-                {
-                    runPos = GetMovePoint(0);
-                }
+                //if (runPos.y <= seaLevel)
+                //{
+                //    runPos = GetMovePoint(0);
+                //}
 
                 float dist = Vector3.Distance(transform.position, other.transform.position);
                 if (other.gameObject.name == "Giant(Clone)")
                 {
-                    target = runPos;
+                    //target = runPos;
                 }
                 else if (other.gameObject.name == "Villager(Clone)")
                 {
-                    target = runPos;
+                    //target = runPos;
 
                 }
                 else if (other.TryGetComponent<Food>(out Food food) && food.foodType == FoodType.Bunny)

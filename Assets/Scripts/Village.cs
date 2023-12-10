@@ -41,7 +41,7 @@ public class Village : MonoBehaviour
 
     public Vector3 GetVillagePoint()
     {
-        Vector3 point;
+        Vector3 point = Vector3.one * 1000;
 
         float randX = Random.Range(-generator.villages.waypointRange, generator.villages.waypointRange);
         float randZ = Random.Range(-generator.villages.waypointRange, generator.villages.waypointRange);
@@ -340,7 +340,6 @@ public class Village : MonoBehaviour
 public enum Advancement
 {
     axe, pickaxe, crops, domestication, sword, armor
-
 }
 [System.Serializable]
 public class Job

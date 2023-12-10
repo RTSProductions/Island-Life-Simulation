@@ -121,7 +121,7 @@ public class Villager : MonoBehaviour
     void FaceTarget()
     {
         Vector3 direction = (target - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 
@@ -161,14 +161,14 @@ public class Villager : MonoBehaviour
 
         Collider[] giants = Physics.OverlapSphere(transform.position, visionRadius * 10, giant);
 
-        //float lowestFoodDist = 10000;
+        float lowestFoodDist = 10000;
 
         foreach (var other in others)
         {
             if (other.gameObject != gameObject)
             {
                 float dist = Vector3.Distance(transform.position, other.transform.position);
-                if (other.gameObject.name == "Giant(Clone)") 
+                if (other.gameObject.name == "Giant(Clone)")
                 {
                     target = other.transform.position;
                     if (dist <= 12)
@@ -181,11 +181,11 @@ public class Villager : MonoBehaviour
                 {
                     //if (occupation == Occupation.basic || occupation == Occupation.knight)
                     //{
-                        target = other.transform.position;
-                        if (dist <= 3)
-                        {
-                            Attack(other.GetComponent<Target>());
-                        }
+                    target = other.transform.position;
+                    if (dist <= 3)
+                    {
+                        Attack(other.GetComponent<Target>());
+                    }
                     //}
                 }
                 else if (other.gameObject.name == "Silo(Clone)" && other.transform.parent != village.transform || other.gameObject.name == "House(Clone)" && other.transform.parent != village.transform && other.transform.parent.parent != village.transform || other.gameObject.name == "Smiths Hut(Clone)" && other.transform.parent != village.transform || other.gameObject.name == "Fence" && other.transform.parent.parent != village.transform)

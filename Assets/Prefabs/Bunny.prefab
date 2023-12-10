@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5214527057239660614}
   - component: {fileID: 8481341869401236228}
   - component: {fileID: -5163516567237638582}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Bunny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,6 +116,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e03af5e83aaef4229aca593b70dca90f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waterDrag: 3
+  waterAngularDrag: 1
+  airDrag: 0
+  airAngularDrag: 0.05
 --- !u!1001 &7124181724545684583
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -197,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a7e5aebc1aee04a239cd3cda41111ecb, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7e5aebc1aee04a239cd3cda41111ecb, type: 3}

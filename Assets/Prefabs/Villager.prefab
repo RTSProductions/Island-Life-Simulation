@@ -92,10 +92,10 @@ MonoBehaviour:
     m_Bits: 1921
   vision:
     serializedVersion: 2
-    m_Bits: 1792
+    m_Bits: 3840
   giant:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 4096
   village: {fileID: 0}
   city: {fileID: 0}
   mesh: {fileID: 3242625897908951431}

@@ -90,9 +90,9 @@ public class Village : MonoBehaviour
             else if (advancement == Advancement.crops)
             {
                 jobs.Add(new Job(Occupation.farmer, 80, 8));
-                jobs.Add(new Job(Occupation.hunterGatherer, 110, 20));
                 int newFarmers = citizens.Count / 8;
                 AssingOccupation(Occupation.farmer, newFarmers, 80, 8);
+                jobs.Add(new Job(Occupation.hunterGatherer, 110, 20));
                 AssingOccupation(Occupation.hunterGatherer, newFarmers, 110, 20);
             }
             else if (advancement == Advancement.sword)
@@ -182,7 +182,7 @@ public class Village : MonoBehaviour
 
         for (int i = 0; i < 1; i++)
         {
-            StartCoroutine(NewCity(Random.Range(3, 10)));
+            StartCoroutine(NewCity(Random.Range(5, 12)));
         }
         for (int i = 0; i < societyLevel; i++)
         {
@@ -221,9 +221,14 @@ public class Village : MonoBehaviour
 
         Silo silo = GetComponentInChildren<Silo>();
 
+        ObjectSpawnData firePoint = generator.GetVillagePoint(city.transform.position);
+        var fire = Instantiate(generator.villages.requiredStructures[1], firePoint.point, Quaternion.LookRotation(firePoint.hitNormal));
+        fire.transform.parent = city.transform;
+
         for (int i = 0; i < houseAmount; i++)
         {
-            if (smithsHut.storage[0].amountSotred < 20 && silo.storage[0].amountSotred < 10)
+
+            if (smithsHut.storage[0].amountSotred < 15 && silo.storage[0].amountSotred < 3)
             {
                 break;
             }
@@ -270,7 +275,7 @@ public class Village : MonoBehaviour
 
         Silo silo = GetComponentInChildren<Silo>();
 
-        if (smithsHut.storage[0].amountSotred < 5 && silo.storage[0].amountSotred >= 15 && HasAdvancement(Advancement.crops))
+        if (smithsHut.storage[0].amountSotred < 5 && silo.storage[0].amountSotred < 15 || !HasAdvancement(Advancement.crops))
         {
             return;
         }
@@ -279,9 +284,9 @@ public class Village : MonoBehaviour
 
         Job farmers = GetJobClass(Occupation.farmer);
 
-        foreach (Villager lumberjack in farmers.occupents)
+        foreach (Villager farmer in farmers.occupents)
         {
-            lumberjack.GoTo(farm.transform.position);
+            farmer.GoTo(farm.transform.position);
         }
         farms.Add(farm.transform);
 

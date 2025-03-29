@@ -917,8 +917,8 @@ MonoBehaviour:
   zSize: 50
   octaves: 3
   seed: 422349
-  randomizeSeed: 0
-  randomizeSeaLevel: 0
+  randomizeSeed: 1
+  randomizeSeaLevel: 1
   seaLevel: 28
   floatingPower: 25
   foliageMask: 0.85
@@ -934,7 +934,7 @@ MonoBehaviour:
   Foliage:
   - name: Tree
     prefab: {fileID: 497721982288463426, guid: 46d44576462f1439398203d7de03004f, type: 3}
-    count: 700
+    count: 1000
   - name: Rock
     prefab: {fileID: 3934876279841137907, guid: b589243873ec443fcab70d22f3ec1d7a, type: 3}
     count: 120

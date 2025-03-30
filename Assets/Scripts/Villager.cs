@@ -68,7 +68,7 @@ public class Villager : MonoBehaviour
         float distToTarget = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(target.x, 0, target.z));
         if (distToTarget <= 2)
         {
-            if (LightingManager.night == true)
+            if (LightingManager.night == true && occupation != Occupation.knight)
             {
                 if (city == null)
                 {
@@ -97,26 +97,55 @@ public class Villager : MonoBehaviour
 
     void Move()
     {
-        //Ray forward = new Ray(transform.position + (Vector3.up * 0.8f), transform.forward);
-        //Ray right = new Ray(transform.position + (Vector3.up * 0.8f), transform.right);
-        //Ray left = new Ray(transform.position + (Vector3.up * 0.8f), -transform.right);
-        //if (Physics.Raycast(forward, 0.32f * 2, obstacleAvoidance))
-        //{
-        //    if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
-        //    {
-        //        Vector3 stirAmount = transform.right.normalized;
-        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-        //        moveAmount = stirAmount * speed;
-        //    }
-        //    else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
-        //    {
-        //        Vector3 stirAmount = -transform.right.normalized;
-        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-        //        moveAmount = stirAmount * speed;
-        //    }
-        //}
+        Vector3 movementDir = (target - transform.position).normalized;
+    
+        Ray forwardRay = new Ray(transform.position + Vector3.up * 0.8f, movementDir);
+        RaycastHit hit;
+    
+        if (Physics.Raycast(forwardRay, out hit, 1.5f, obstacleAvoidance))
+        {
+            Vector3 avoidanceDir = Vector3.zero;
+
+            if (!Physics.Raycast(transform.position + Vector3.up * 0.8f, transform.right, 1.5f, obstacleAvoidance))
+            {
+                avoidanceDir += transform.right;
+            }
+            else if (!Physics.Raycast(transform.position + Vector3.up * 0.8f, -transform.right, 1.5f, obstacleAvoidance))
+            {
+                avoidanceDir -= transform.right;
+            }
+
+            if (avoidanceDir != Vector3.zero)
+            {
+                movementDir = (movementDir + avoidanceDir).normalized;
+            }
+        }
+
+        moveAmount = movementDir * speed;
         rb.MovePosition(transform.position + moveAmount * Time.fixedDeltaTime);
     }
+    // void Move()
+    // {
+    //     Ray forward = new Ray(transform.position + (Vector3.up * 0.8f), transform.forward);
+    //     Ray right = new Ray(transform.position + (Vector3.up * 0.8f), transform.right);
+    //     Ray left = new Ray(transform.position + (Vector3.up * 0.8f), -transform.right);
+    //     if (Physics.Raycast(forward, 0.32f * 2, obstacleAvoidance))
+    //     {
+    //        if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
+    //        {
+    //            Vector3 stirAmount = transform.right.normalized;
+    //            //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
+    //            moveAmount = stirAmount * speed;
+    //        }
+    //        else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
+    //        {
+    //            Vector3 stirAmount = -transform.right.normalized;
+    //            //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
+    //            moveAmount = stirAmount * speed;
+    //        }
+    //     }
+    //     rb.MovePosition(transform.position + moveAmount * Time.fixedDeltaTime);
+    // }
 
     void FaceTarget()
     {
@@ -203,6 +232,11 @@ public class Villager : MonoBehaviour
                                     TakeOver(other.transform.parent.GetComponent<Village>());
                                     Attack(structure);
                                     village.AddCity(other.transform.parent);
+                                }
+                                else if (other.gameObject.name == "Town Hall(Clone)")
+                                {
+                                    Attack(structure);
+                                    village.AddCity(other.transform.parent.gameObject);
                                 }
                             }
                             Attack(structure);
@@ -345,7 +379,7 @@ public class Villager : MonoBehaviour
             GetComponentInChildren<Animator>().Play("Guy Attacking");
         }
     }
-    public void Occupate(Occupation newOccupation, float maxHealth, float NewDamage)
+    public void Occupate(Occupation newOccupation, float maxHealth, float NewDamage, float newVisionRadius)
     {
         int j = village.GetJobID(occupation);
         if (occupation != Occupation.basic)
@@ -360,6 +394,7 @@ public class Villager : MonoBehaviour
         target.maxHealth = maxHealth;
         target.Heal(maxHealth);
         damage = NewDamage;
+        visionRadius = newVisionRadius;
         Debug.Log("Just got " + newOccupation + " " + occupation);
     }
 

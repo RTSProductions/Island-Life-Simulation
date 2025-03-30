@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 795621237}
   - component: {fileID: 795621236}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Fube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -463,7 +463,7 @@ Transform:
   m_GameObject: {fileID: 795621235}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1121, y: 46.003647, z: -202}
+  m_LocalPosition: {x: 758, y: 46.003647, z: 476}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -781,7 +781,7 @@ MonoBehaviour:
   randomizeSeed: 1
   randomizeSeaLevel: 0
   seaLevel: 28
-  floatingPower: 25
+  floatingPower: 30
   foliageMask: 0.7
   maxDist: 0
   vertexID: 0
@@ -798,7 +798,7 @@ MonoBehaviour:
     count: 2000
   - name: Rock
     prefab: {fileID: 3934876279841137907, guid: b589243873ec443fcab70d22f3ec1d7a, type: 3}
-    count: 240
+    count: 1600
   - name: Fern
     prefab: {fileID: 1076873970968766207, guid: 254cc8c9fbf0a4d48bcf1f2dd0bab932, type: 3}
     count: 1600
@@ -811,10 +811,10 @@ MonoBehaviour:
   Animals:
   - name: Bunny
     prefab: {fileID: 4642918572124277928, guid: 532bfb52eec5248228b795744846bed0, type: 3}
-    count: 0
+    count: 200
   - name: Fox
     prefab: {fileID: 5380491519464390213, guid: 2204f935e4ad340a993bab25f646d92b, type: 3}
-    count: 0
+    count: 200
   villages:
     villager: {fileID: 5689835426879535664, guid: 72128ea493afa4cafb209a0a7e0a347e, type: 3}
     house: {fileID: 5703046057555214956, guid: e11cedd40069048a584627fe2937f95f, type: 3}
@@ -823,6 +823,7 @@ MonoBehaviour:
     - {fileID: 3072479968773067344, guid: 684e73fa7720d436d882ad94f4328a13, type: 3}
     - {fileID: 2323953275062508369, guid: 7dbbee827eb5a427499a8db985ef8c29, type: 3}
     - {fileID: 4336405099098291895, guid: 1b65f66d656304f8b961077d51d71c71, type: 3}
+    townHall: {fileID: 5703046057555214956, guid: a2b8fcadbf10742338f779485c72634d, type: 3}
     possibleNames:
     - Place
     - Simland
@@ -999,7 +1000,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.0000013733, y: 1.39, z: -0.00000091553}
-  m_LocalScale: {x: 1.0143528, y: 1.014353, z: 1.014353}
+  m_LocalScale: {x: 0.9307687, y: 0.9307687, z: 0.9307687}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1023206291}
@@ -1092,7 +1093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1649985360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1100,7 +1101,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649985359}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f30c520cd03054e84a066f17390b4dcf, type: 3}
   m_Name: 
@@ -1122,7 +1123,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649985359}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.7600763, g: 0.8738795, b: 0.6414803, a: 1}
@@ -1147,7 +1148,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 0.31
+  far clip plane: 3000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1174,13 +1175,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649985359}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 384, y: 347.691, z: 412}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 1000, y: 1829.2, z: 1000}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1795400284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,7 +1330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9061687305335827695, guid: 5fa88b7d023784f0b9ad58af1bcaff9f, type: 3}
       propertyPath: far clip plane
-      value: 3000
+      value: 2000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

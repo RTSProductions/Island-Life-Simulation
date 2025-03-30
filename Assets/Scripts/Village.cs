@@ -23,6 +23,8 @@ public class Village : MonoBehaviour
 
     public List<Job> jobs;
 
+    bool atWar = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +38,35 @@ public class Village : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < citizens.Count; i++)
+        {
+            if (citizens[i] == null)
+            {
+                citizens.RemoveAt(i);
+            }
+        }
+        foreach (Job job in jobs)
+        {
+            for (int i = 0; i < job.occupents.Count; i++)
+            {
+                if (job.occupents[i] == null)
+                {
+                    job.occupents.RemoveAt(i);
+                }
+            }
+        }
+        for (int i = 0; i < farms.Count; i++)
+        {
+            if (farms[i] == null)
+            {
+                farms.RemoveAt(i);
+            }
+        }
+
+        if (citizens.Count < (generator.villages.population - 15) + (5 * societyLevel) && atWar == false)
+        {
+            NewVillager();
+        }
     }
 
     public Vector3 GetVillagePoint()
@@ -77,29 +107,29 @@ public class Village : MonoBehaviour
 
             if (advancement == Advancement.axe)
             {
-                jobs.Add(new Job(Occupation.lumberjack, 100, 15));
+                jobs.Add(new Job(Occupation.lumberjack, 100, 15, 50));
                 int newLumberjacks = citizens.Count / 4;
-                AssingOccupation(Occupation.lumberjack, newLumberjacks, 100, 15);
+                AssingOccupation(Occupation.lumberjack, newLumberjacks, 100, 15, 50);
             }
             else if (advancement == Advancement.pickaxe)
             {
-                jobs.Add(new Job(Occupation.miner, 100, 15));
+                jobs.Add(new Job(Occupation.miner, 100, 15, 20));
                 int newMiners = citizens.Count / 4;
-                AssingOccupation(Occupation.miner, newMiners, 100, 15);
+                AssingOccupation(Occupation.miner, newMiners, 100, 15, 20);
             }
             else if (advancement == Advancement.crops)
             {
-                jobs.Add(new Job(Occupation.farmer, 80, 8));
+                jobs.Add(new Job(Occupation.farmer, 80, 8, 12));
                 int newFarmers = citizens.Count / 8;
-                AssingOccupation(Occupation.farmer, newFarmers, 80, 8);
-                jobs.Add(new Job(Occupation.hunterGatherer, 110, 20));
-                AssingOccupation(Occupation.hunterGatherer, newFarmers, 110, 20);
+                AssingOccupation(Occupation.farmer, newFarmers, 80, 8, 12);
+                jobs.Add(new Job(Occupation.hunterGatherer, 110, 20, 30));
+                AssingOccupation(Occupation.hunterGatherer, newFarmers, 110, 20, 30);
             }
             else if (advancement == Advancement.sword)
             {
-                jobs.Add(new Job(Occupation.knight, 130, 40));
+                jobs.Add(new Job(Occupation.knight, 130, 40, 60));
                 int newKnights = citizens.Count / 5;
-                AssingOccupation(Occupation.knight, newKnights, 130, 40);
+                AssingOccupation(Occupation.knight, newKnights, 130, 40, 60);
             }
             LevelUp();
 
@@ -139,14 +169,14 @@ public class Village : MonoBehaviour
         }
     }
 
-    void AssingOccupation(Occupation occupation, int newOccupents, float maxHealth, float NewDamage)
+    void AssingOccupation(Occupation occupation, int newOccupents, float maxHealth, float NewDamage, float newVisionRadius)
     {
         int j = GetJobID(occupation);
         int rand = Random.Range(0, citizens.Count - (newOccupents + 1));
         for (int i = rand; i < citizens.Count; i++)
         {
             Villager villager = citizens[i].GetComponent<Villager>();
-            villager.Occupate(occupation, maxHealth, NewDamage);
+            villager.Occupate(occupation, maxHealth, NewDamage, newVisionRadius);
             Debug.Log("New Guy " + occupation + " " + i);
             if (!jobs[j].occupents.Contains(citizens[i].GetComponent<Villager>()))
             {
@@ -167,9 +197,28 @@ public class Village : MonoBehaviour
             city.citizens.Add(citizen);
         }
         city.SkinColor = vil.SkinColor;
+        ObjectSpawnData townHallPoint = generator.GetVillagePoint(city.transform.position);     
+        var townHall = Instantiate(generator.villages.townHall, townHallPoint.point, Quaternion.LookRotation(townHallPoint.hitNormal));
+        townHall.transform.parent = city.transform;
+        vil.enabled = false;
+        if (societyLevel == 0)
+        {
+            societyLevel++;
+        }
+    }
 
-        Destroy(village.GetComponent<Village>());
-
+    public void AddCity(GameObject newCity)
+    {
+        cities.Add(newCity.transform);
+        newCity.transform.parent = transform;
+        City city = newCity.GetComponent<City>();
+        foreach(Transform citizen in city.citizens)
+        {
+            city.citizens.Add(citizen);
+        }
+        ObjectSpawnData townHallPoint = generator.GetVillagePoint(city.transform.position);     
+        var townHall = Instantiate(generator.villages.townHall, townHallPoint.point, Quaternion.LookRotation(townHallPoint.hitNormal));
+        townHall.transform.parent = city.transform;
         if (societyLevel == 0)
         {
             societyLevel++;
@@ -225,6 +274,10 @@ public class Village : MonoBehaviour
         var fire = Instantiate(generator.villages.requiredStructures[1], firePoint.point, Quaternion.LookRotation(firePoint.hitNormal));
         fire.transform.parent = city.transform;
 
+        ObjectSpawnData townHallPoint = generator.GetVillagePoint(city.transform.position);     
+        var townHall = Instantiate(generator.villages.townHall, townHallPoint.point, Quaternion.LookRotation(townHallPoint.hitNormal));
+        townHall.transform.parent = city.transform;
+
         for (int i = 0; i < houseAmount; i++)
         {
 
@@ -261,12 +314,114 @@ public class Village : MonoBehaviour
 
                 int randomJob = Random.Range(0, jobs.Capacity - 1);
 
-                vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage);
+                vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage, jobs[randomJob].visionRadius);
+                if (silo.storage[1].amountSotred >= 1)
+                {
+                    silo.storage[1].amountSotred -=1;
+                }
+                else if (silo.storage[0].amountSotred >= 1)
+                {
+                    silo.storage[0].amountSotred -=1;
+                }
+                else if (silo.storage[2].amountSotred >= 1)
+                {
+                    silo.storage[2].amountSotred -=1;
+                }
+                else if (silo.storage[3].amountSotred >= 1)
+                {
+                    silo.storage[3].amountSotred -=1;
+                }
+                else 
+                {
+                    break;
+                }
             }
 
-            silo.storage[0].amountSotred -= 10;
         }
 
+    }
+
+    void CreateHouse (Transform city)
+    {
+        Job lumberjacks = GetJobClass(Occupation.lumberjack);
+        SmithsHut smithsHut = GetComponentInChildren<SmithsHut>();
+        ObjectSpawnData housePoint = generator.GetVillagePoint(city.transform.position);
+
+        foreach (Villager lumberjack in lumberjacks.occupents)
+        {
+            lumberjack.GoTo(housePoint.point);
+        }
+
+        var house = Instantiate(generator.villages.house, housePoint.point, Quaternion.LookRotation(housePoint.hitNormal));
+        house.transform.parent = city.transform;
+
+        smithsHut.storage[0].amountSotred -= 20;
+    }
+
+    void NewVillager()
+    {
+        Silo silo = GetComponentInChildren<Silo>();
+
+        if (silo.storage[1].amountSotred >= 1)
+        {
+            silo.storage[1].amountSotred -=1;
+        }
+        else if (silo.storage[0].amountSotred >= 1)
+        {
+            silo.storage[0].amountSotred -=1;
+        }
+        else if (silo.storage[2].amountSotred >= 1)
+        {
+            silo.storage[2].amountSotred -=1;
+        }
+        else if (silo.storage[3].amountSotred >= 1)
+        {
+            silo.storage[3].amountSotred -=1;
+        }
+        else 
+        {
+            return;
+        }
+
+        List<Transform> possibleCities = new List<Transform>();
+        for (int i = 0; i < cities.Count; i++)
+        {
+            possibleCities.Add(cities[i]);
+        }
+        possibleCities.Add(transform);
+
+        int randCity = Random.Range(0, cities.Count - 1);
+        if (randCity != possibleCities.Count - 1)
+        {
+            City cityComp = possibleCities[randCity].GetComponent<City>();
+
+            Vector3 villagerSpawnPoint = cityComp.GetVillagePoint();
+            var villager = Instantiate(generator.villages.villager, new Vector3(villagerSpawnPoint.x, 100, villagerSpawnPoint.z), Quaternion.identity);
+            villager.transform.parent = transform;
+            Villager vil = villager.GetComponent<Villager>();
+            vil.village = this;
+            vil.city = cityComp;
+            vil.mesh.sharedMaterial = SkinColor;
+            cityComp.citizens.Add(villager.transform);
+            citizens.Add(villager.transform);
+
+            int randomJob = Random.Range(0, jobs.Capacity - 1);
+
+            vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage, jobs[randomJob].visionRadius);
+        }
+        else 
+        {
+            Vector3 villagerSpawnPoint = GetVillagePoint();
+            var villager = Instantiate(generator.villages.villager, new Vector3(villagerSpawnPoint.x, 100, villagerSpawnPoint.z), Quaternion.identity);
+            villager.transform.parent = transform;
+            Villager vil = villager.GetComponent<Villager>();
+            vil.village = this;
+            vil.mesh.sharedMaterial = SkinColor;
+            citizens.Add(villager.transform);
+            int randomJob = Random.Range(0, jobs.Capacity - 1);
+
+            vil.Occupate(jobs[randomJob].occupation, jobs[randomJob].maxHealth, jobs[randomJob].damage, jobs[randomJob].visionRadius);
+        }
     }
 
     void NewFarm()
@@ -315,6 +470,30 @@ public class Village : MonoBehaviour
         return point;
     }
 
+    public void RequestConstruction(ConstructionType type, Transform city)
+    {
+        switch (type)
+        {
+            case ConstructionType.house:
+                if (atWar)
+                {
+                    break;
+                }
+                Job lumberjacks = GetJobClass(Occupation.lumberjack);
+                SmithsHut smithsHut = GetComponentInChildren<SmithsHut>();
+                if (lumberjacks.occupents.Count <= 0)
+                {
+                    break;
+                }
+                if (smithsHut.storage[0].amountSotred < 20)
+                {
+                    break;
+                }
+                CreateHouse(city);
+                break;
+        }
+    }
+
     public Job GetJobClass(Occupation occupation)
     {
         Job currentJob = null;
@@ -341,10 +520,22 @@ public class Village : MonoBehaviour
         }
         return j;
     }
+    void OnDrawGizmosSelected() 
+    {
+        for (int i = 0; i < cities.Count; i++)
+        {
+            Debug.DrawLine(transform.position, cities[i].transform.position, Color.blue);
+        }
+    }
 }
 public enum Advancement
 {
     axe, pickaxe, crops, domestication, sword, armor
+}
+
+public enum ConstructionType
+{
+    house
 }
 [System.Serializable]
 public class Job
@@ -359,11 +550,15 @@ public class Job
     [HideInInspector]
     public float damage;
 
-    public Job(Occupation newOccupation, float newMaxHealth, float newDamage)
+    [HideInInspector]
+    public float visionRadius;
+
+    public Job(Occupation newOccupation, float newMaxHealth, float newDamage, float newVisionRadius)
     {
         occupation = newOccupation;
         maxHealth = newMaxHealth;
         damage = newDamage;
+        visionRadius = newVisionRadius;
         occupents = new List<Villager>();
     }
 }

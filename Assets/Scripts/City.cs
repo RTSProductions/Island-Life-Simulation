@@ -13,16 +13,26 @@ public class City : MonoBehaviour
 
     public List<Transform> citizens; 
 
+    float timeToRequest = 0;
+    float requestDelay = 30;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        generator = FindAnyObjectByType<MapGenerator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.time >= timeToRequest)
+        {
+            if (transform.childCount < 5) 
+            {
+                transform.parent.GetComponent<Village>().RequestConstruction(ConstructionType.house, transform);
+                timeToRequest = Time.time + requestDelay;
+            }
+        }
     }
 
     public Vector3 GetVillagePoint()

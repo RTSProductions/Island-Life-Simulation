@@ -1050,8 +1050,8 @@ MonoBehaviour:
     - Secantina
     - The Elllis
     - espania
-    count: 4
-    population: 25
+    count: 10
+    population: 50
     maxDist: 25
     minDist: 2
     waypointRange: 55

@@ -17,10 +17,15 @@ public class Silo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (storage[0].amountSotred >= 20 && !village.HasAdvancement(Advancement.crops))
+        if (storage[0].amountSotred >= 35 && !village.HasAdvancement(Advancement.crops))
         {
             village.Achive(Advancement.crops);
             village.Achive(Advancement.axe);
+        }
+
+        if (storage[2].amountSotred >= 15 && storage[3].amountSotred >= 15 && !village.HasAdvancement(Advancement.domestication))
+        {
+            village.Achive(Advancement.domestication);
         }
     }
 

@@ -323,6 +323,8 @@ public class VillageSpawner
 
     public GameObject[] requiredStructures;
 
+    public GameObject townHall;
+
     public string[] possibleNames;
 
     public int count;

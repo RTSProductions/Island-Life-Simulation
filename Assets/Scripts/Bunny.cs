@@ -41,7 +41,7 @@ public class Bunny : MonoBehaviour
         See();
         if (Time.time >= reproductionTime)
         {
-            Reproduce();
+            //Reproduce();
         }
         if (transform.position.y <= -80)
         {
@@ -55,7 +55,8 @@ public class Bunny : MonoBehaviour
             target = GetMovePoint(0);
         }
 
-        Vector3 movementDir = (target - transform.position).normalized;
+        Vector3 noise = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+        Vector3 movementDir = (target - transform.position + noise).normalized;
         moveAmount = movementDir * speed;
     }
 
@@ -67,24 +68,31 @@ public class Bunny : MonoBehaviour
 
     void Move()
     {
-        //Ray forward = new Ray(transform.position + (Vector3.up * 0.5f), transform.forward);
-        //Ray right = new Ray(transform.position + (Vector3.up * 0.5f), transform.right);
-        //Ray left = new Ray(transform.position + (Vector3.up * 0.5f), -transform.right);
-        //if (Physics.Raycast(forward, 0.32f * 2, obstacleAvoidance))
-        //{
-        //    if (!Physics.Raycast(right, 0.32f * 2, obstacleAvoidance))
-        //    {
-        //        Vector3 stirAmount = transform.right;
-        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-        //        moveAmount = stirAmount * speed;
-        //    }
-        //    else if (!Physics.Raycast(left, 0.32f * 2, obstacleAvoidance))
-        //    {
-        //        Vector3 stirAmount = -transform.right;
-        //        //Vector3 movementDir = (transform.position + stirAmount - transform.position).normalized;
-        //        moveAmount = stirAmount * speed;
-        //    }
-        //}
+        Vector3 movementDir = (target - transform.position).normalized;
+    
+        Ray forwardRay = new Ray(transform.position + Vector3.up * 0.8f, movementDir);
+        RaycastHit hit;
+    
+        if (Physics.Raycast(forwardRay, out hit, 1.5f, obstacleAvoidance))
+        {
+            Vector3 avoidanceDir = Vector3.zero;
+
+            if (!Physics.Raycast(transform.position + Vector3.up * 0.8f, transform.right, 1.5f, obstacleAvoidance))
+            {
+                avoidanceDir += transform.right;
+            }
+            else if (!Physics.Raycast(transform.position + Vector3.up * 0.8f, -transform.right, 1.5f, obstacleAvoidance))
+            {
+                avoidanceDir -= transform.right;
+            }
+
+            if (avoidanceDir != Vector3.zero)
+            {
+                movementDir = (movementDir + avoidanceDir).normalized;
+            }
+        }
+
+        moveAmount = movementDir * speed;
         rb.MovePosition(transform.position + moveAmount * Time.fixedDeltaTime);
     }
 
@@ -117,12 +125,13 @@ public class Bunny : MonoBehaviour
 
         if (tries >= 10)
         {
-            return new Vector3(randX + transform.position.x, transform.position.y, randZ + transform.position.z);
+            return new Vector3(randX + transform.position.x, 50, randZ + transform.position.z);
         }
 
-        if (Physics.Raycast(point, Vector3.down, out hit, 200) && hit.point.y >= seaLevel)
+        if (Physics.Raycast(point, Vector3.down, out hit, 200))
         {
-            point = new Vector3(randX + transform.position.x, hit.point.y, randZ + transform.position.z);
+            float groundY = Mathf.Max(hit.point.y, seaLevel);
+            point = new Vector3(randX + transform.position.x, groundY + 1f, randZ + transform.position.z);
         }
         else
         {
@@ -144,28 +153,38 @@ public class Bunny : MonoBehaviour
         {
             if (other.gameObject != gameObject)
             {
-                //Vector3 runPos = (other.transform.position - transform.position) + new Vector3(10, 0, 10);
                 //if (runPos.y <= seaLevel)
                 //{
                 //    runPos = GetMovePoint(0);
                 //}
                 float dist = Vector3.Distance(transform.position, other.transform.position);
-                //if (other.gameObject.name == "Giant(Clone)")
-                //{
-                //    target = runPos;
-                //    break;
-                //}
-                //else if (other.gameObject.name == "Villager(Clone)")
-                //{
-                //    target = runPos;
+                if (other.gameObject.name == "Giant(Clone)")
+                {
+                    Vector3 runDirection = (transform.position - other.transform.position).normalized;
+                    float escapeDistance = 10f; 
+                
+                    target = transform.position + (runDirection * escapeDistance);
+                    return;
+                }
+                else if (other.gameObject.name == "Villager(Clone)")
+                {
+                    Vector3 runDirection = (transform.position - other.transform.position).normalized;
+                    float escapeDistance = 10f; 
+                
+                    target = transform.position + (runDirection * escapeDistance);
+                    return;
 
-                //}
-                //else if (other.gameObject.name == "Fox(Clone)")
-                //{
-                //    target = runPos;
+                }
+                else if (other.gameObject.name == "Fox(Clone)")
+                {
+                    Vector3 runDirection = (transform.position - other.transform.position).normalized;
+                    float escapeDistance = 10f; 
+                
+                    target = transform.position + (runDirection * escapeDistance);
+                    return;
 
-                //}
-                /*else*/ if (other.TryGetComponent<Food>(out Food food))
+                }
+                else if (other.TryGetComponent<Food>(out Food food))
                 {
                     if (food.foodType == FoodType.Apple || food.foodType == FoodType.Fern)
                     {
@@ -187,11 +206,11 @@ public class Bunny : MonoBehaviour
         }
     }
 
-    void Reproduce()
-    {
-        var child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
-        child.GetComponent<Bunny>().reproductionTime = Random.Range(30, 1000) + reproductionDelay;
-        reproductionTime = Time.time + reproductionDelay;
-        child.gameObject.name = this.gameObject.name;
-    }
+    // void Reproduce()
+    // {
+    //     var child = Instantiate(this.gameObject, transform.position, Quaternion.identity);
+    //     child.GetComponent<Bunny>().reproductionTime = Random.Range(30, 1000) + reproductionDelay;
+    //     reproductionTime += Time.time + reproductionDelay;
+    //     child.gameObject.name = this.gameObject.name;
+    // }
 }

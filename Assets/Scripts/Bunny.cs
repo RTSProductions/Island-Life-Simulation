@@ -47,7 +47,7 @@ public class Bunny : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 70, transform.position.z);
             target = GetMovePoint(0);
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
         }
         float distToTarget = Vector3.Distance(transform.position, target);
         if (distToTarget <= 3)

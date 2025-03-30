@@ -54,13 +54,13 @@ public class BuoyancyObject : MonoBehaviour
     {
         if (underWater)
         {
-            rb.drag = waterDrag;
-            rb.angularDrag = waterAngularDrag;
+            rb.linearDamping = waterDrag;
+            rb.angularDamping = waterAngularDrag;
         }
         else
         {
-            rb.drag = airDrag;
-            rb.angularDrag = airAngularDrag;
+            rb.linearDamping = airDrag;
+            rb.angularDamping = airAngularDrag;
         }
     }
 }

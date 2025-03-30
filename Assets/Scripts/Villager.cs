@@ -55,7 +55,7 @@ public class Villager : MonoBehaviour
         if (transform.position.y <= -80)
         {
             transform.position = new Vector3(transform.position.x, 70, transform.position.z);
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             if (city == null)
             {
                 target = village.GetVillagePoint();

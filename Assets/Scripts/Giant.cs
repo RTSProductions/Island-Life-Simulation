@@ -42,7 +42,7 @@ public class Giant : MonoBehaviour
         if (transform.position.y <= -80)
         {
             transform.position = new Vector3(transform.position.x, 120, transform.position.z);
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             target = GetMovePoint();
         }
         float distToTarget = Vector3.Distance(transform.position, target);
